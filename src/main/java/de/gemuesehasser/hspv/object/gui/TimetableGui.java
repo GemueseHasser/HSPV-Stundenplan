@@ -3,6 +3,7 @@ package de.gemuesehasser.hspv.object.gui;
 import de.gemuesehasser.hspv.handler.WeekTimetableHandler;
 import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.component.LvsButton;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Das {@link TimetableGui} stellt eine Instanz eines {@link Gui} dar, welches den Stundenplan anzeigt.
@@ -137,7 +139,7 @@ public final class TimetableGui extends Gui {
 
             assert lvs.getDescription() != null;
             final String[] descriptionParts = lvs.getDescription().split("\n");
-            final String room = (descriptionParts.length > 2 ? descriptionParts[2] : "");
+            final String room = (descriptionParts.length > 2 ? descriptionParts[2] : StringUtils.EMPTY);
             String description = "description";
 
             for (int i = 0; i < descriptionParts[1].length(); i++) {
@@ -148,7 +150,10 @@ public final class TimetableGui extends Gui {
             }
 
             final LvsButton button = new LvsButton(
-                "<html><a style='margin: 20px'>" + description + "<br><br>" + room + "</a>",
+                "<html><a style='margin: 20px'>" + description + "<br><br>" + (Objects.equals(
+                    room,
+                    StringUtils.EMPTY
+                ) ? "Kein Raum" : room) + "</a>",
                 25
             );
             button.setBounds(x, y, width, height);
