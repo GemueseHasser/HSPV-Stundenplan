@@ -75,7 +75,11 @@ public abstract class Gui extends JFrame {
         protected void paintComponent(@NotNull final Graphics g) {
             super.paintComponent(g);
 
-            draw((Graphics2D) g);
+            final Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+            draw(g2d);
         }
         //</editor-fold>
 

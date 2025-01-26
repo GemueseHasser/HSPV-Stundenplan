@@ -2,6 +2,7 @@ package de.gemuesehasser.hspv.object.gui;
 
 import de.gemuesehasser.hspv.handler.WeekTimetableHandler;
 import de.gemuesehasser.hspv.object.LVS;
+import de.gemuesehasser.hspv.object.gui.component.LvsButton;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -146,7 +147,10 @@ public final class TimetableGui extends Gui {
                 break;
             }
 
-            final JButton button = new JButton("<html><a style='margin: 20px'>" + description + "<br><br>" + room + "</a>");
+            final LvsButton button = new LvsButton(
+                "<html><a style='margin: 20px'>" + description + "<br><br>" + room + "</a>",
+                25
+            );
             button.setBounds(x, y, width, height);
             button.setBackground(Color.LIGHT_GRAY);
             button.setFocusable(false);
