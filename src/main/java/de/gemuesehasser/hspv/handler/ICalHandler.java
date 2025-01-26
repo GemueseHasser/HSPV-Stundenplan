@@ -36,6 +36,8 @@ public final class ICalHandler {
     public static final int NO_ERROR = 0;
     /** Der Rückgabewert, wenn bei der Anmeldung ein Fehler aufgetreten ist. */
     public static final int WRONG_LOGIN = 1;
+    /** Der Rückgabewert, wenn keine Verbindung zum Host (Antrago) aufgebaut werden kann. */
+    public static final int NO_CONNECTION_ERROR = 2;
     //</editor-fold>
 
 
@@ -78,6 +80,10 @@ public final class ICalHandler {
             final URL timetableUrl = new URL(
                 "https://mvc.antrago.hspv.nrw.de/teilnehmerportal/Member/Stundenplan/ExportCalendar/download.ics?quelle=Veranstaltung&dataId=-1&year=2025&month=1"
             );
+
+            if (!isConnectionPreset()) {
+                return NO_CONNECTION_ERROR;
+            }
 
             try (final WebClient webClient = new WebClient()) {
                 webClient.getOptions().setThrowExceptionOnScriptError(false);
@@ -176,5 +182,47 @@ public final class ICalHandler {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
         return LocalDateTime.parse(date, formatter);
     }
+
+    //<editor-fold desc="utility">
+
+    /**
+     * Prüft anhand von verschiedener großer Webseiten, ob eine Verbindung zu einer dieser Webseiten hergestellt werden
+     * kann und schließt daraus, ob eine Internetverbindung besteht oder nicht.
+     *
+     * @return Wenn eine Internetverbindung besteht {@code true}, ansonsten {@code false}.
+     */
+    private static boolean isConnectionPreset() {
+        return isHostReachable("google.de") || isHostReachable("amazon.de")
+            || isHostReachable("apple.com") || isHostReachable("github.com");
+    }
+
+    /**
+     * Prüft, ob ein bestimmter Host erreichbar ist, indem dieser angepingt wird.
+     *
+     * @param host Der Host, welcher angepingt werden und damit auf Erreichbarkeit geprüft werden soll.
+     *
+     * @return Wenn dieser Host erreichbar ist, indem dieser angepingt wird, {@code true}, ansonsten {@code false}.
+     */
+    private static boolean isHostReachable(final String host) {
+        try {
+            final String cmd;
+
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                // For Windows
+                cmd = "ping -n 1 " + host;
+            } else {
+                // For Linux and OSX
+                cmd = "ping -c 1 " + host;
+            }
+
+            final Process pingProcess = Runtime.getRuntime().exec(cmd);
+            pingProcess.waitFor();
+
+            return pingProcess.exitValue() == 0;
+        } catch (InterruptedException | IOException e) {
+            return false;
+        }
+    }
+    //</editor-fold>
 
 }

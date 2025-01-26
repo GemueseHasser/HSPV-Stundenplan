@@ -124,10 +124,35 @@ public final class LoginGui extends Gui implements KeyListener {
         final String passwordText = passwordBuilder.toString();
 
         final ICalHandler iCalHandler = new ICalHandler(username, passwordText);
+        final int icalReturnCode = iCalHandler.loadICalFile();
 
-        if (iCalHandler.loadICalFile() == ICalHandler.WRONG_LOGIN) {
+        if (icalReturnCode != ICalHandler.NO_ERROR) {
             loadingGui.dispose();
             new LoginGui(true).open();
+
+            switch (icalReturnCode) {
+                case ICalHandler.WRONG_LOGIN:
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "Fehlerhafte Anmeldedaten.",
+                        "Login fehlgeschlagen",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    break;
+
+                case ICalHandler.NO_CONNECTION_ERROR:
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "Es konnte keine Verbindung hergestellt werden.",
+                        "Login fehlgeschlagen",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    break;
+
+                default:
+                    break;
+            }
+
             return;
         }
 
