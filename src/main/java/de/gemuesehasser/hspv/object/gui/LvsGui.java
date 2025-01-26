@@ -1,6 +1,6 @@
-package de.gemuesehasser.hspv.timetable.object.gui;
+package de.gemuesehasser.hspv.object.gui;
 
-import de.gemuesehasser.hspv.timetable.object.LVS;
+import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

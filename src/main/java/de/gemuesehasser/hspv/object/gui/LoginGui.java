@@ -1,7 +1,7 @@
-package de.gemuesehasser.hspv.timetable.object.gui;
+package de.gemuesehasser.hspv.object.gui;
 
-import de.gemuesehasser.hspv.timetable.HspvTimetable;
-import de.gemuesehasser.hspv.timetable.handler.ICalHandler;
+import de.gemuesehasser.hspv.Timetable;
+import de.gemuesehasser.hspv.handler.ICalHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -25,7 +25,7 @@ public final class LoginGui extends Gui implements KeyListener {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Titel dieses Fensters. */
-    private static final String TITLE = "HSPV Timetable";
+    private static final String TITLE = "HSPV-Stundenplan";
     /** Die Breite dieses Fensters. */
     private static final int WIDTH = 300;
     /** Die Höhe dieses Fensters. */
@@ -131,7 +131,7 @@ public final class LoginGui extends Gui implements KeyListener {
             return;
         }
 
-        HspvTimetable.setLvsMap(iCalHandler.getLvs());
+        Timetable.setLvsMap(iCalHandler.getLvs());
 
         final TimetableGui timetableGui = new TimetableGui(username, loadingGui);
         timetableGui.open();

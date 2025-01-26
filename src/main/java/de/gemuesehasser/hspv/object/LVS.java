@@ -1,4 +1,4 @@
-package de.gemuesehasser.hspv.timetable.object;
+package de.gemuesehasser.hspv.object;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
-package de.gemuesehasser.hspv.timetable.handler;
+package de.gemuesehasser.hspv.handler;
 
-import de.gemuesehasser.hspv.timetable.HspvTimetable;
-import de.gemuesehasser.hspv.timetable.object.LVS;
+import de.gemuesehasser.hspv.Timetable;
+import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -36,7 +36,7 @@ public final class WeekTimetableHandler {
             .plusDays(weekAddition * 7L);
         final LocalDate end = begin.plusDays(5);
 
-        for (@NotNull final Map.Entry<LocalDateTime, LVS> lvsEntry : HspvTimetable.getLvsMap().entrySet()) {
+        for (@NotNull final Map.Entry<LocalDateTime, LVS> lvsEntry : Timetable.getLvsMap().entrySet()) {
             final LocalDateTime lvsDate = lvsEntry.getKey();
             final LVS lvs = lvsEntry.getValue();
 

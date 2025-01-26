@@ -1,7 +1,7 @@
-package de.gemuesehasser.hspv.timetable;
+package de.gemuesehasser.hspv;
 
-import de.gemuesehasser.hspv.timetable.object.LVS;
-import de.gemuesehasser.hspv.timetable.object.gui.LoginGui;
+import de.gemuesehasser.hspv.object.LVS;
+import de.gemuesehasser.hspv.object.gui.LoginGui;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 
 /**
- * Die Haupt- und Main-Klasse der HSPV-Timetable Anwendung.
+ * Die Haupt- und Main-Klasse der HSPV-Stundenplan Anwendung.
  */
-public class HspvTimetable {
+public class Timetable {
 
     //<editor-fold desc="STATIC FIELDS">
     /** Alle geladenen Lehrveranstaltungen aus der aktuellen ICS-Datei. */

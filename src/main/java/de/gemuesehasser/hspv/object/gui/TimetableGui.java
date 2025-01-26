@@ -1,7 +1,7 @@
-package de.gemuesehasser.hspv.timetable.object.gui;
+package de.gemuesehasser.hspv.object.gui;
 
-import de.gemuesehasser.hspv.timetable.handler.WeekTimetableHandler;
-import de.gemuesehasser.hspv.timetable.object.LVS;
+import de.gemuesehasser.hspv.handler.WeekTimetableHandler;
+import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public final class TimetableGui extends Gui {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Titel dieses Fensters. */
-    private static final String TITLE = "HSPV-Timetable";
+    private static final String TITLE = "HSPV-Stundenplan";
     /** Die Breite dieses Fensters */
     private static final int WIDTH = 550;
     /** Die Höhe dieses Fensters. */

@@ -1,4 +1,4 @@
-package de.gemuesehasser.hspv.timetable.handler;
+package de.gemuesehasser.hspv.handler;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -6,7 +6,7 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import de.gemuesehasser.hspv.timetable.object.LVS;
+import de.gemuesehasser.hspv.object.LVS;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
