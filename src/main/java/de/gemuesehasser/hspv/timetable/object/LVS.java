@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
  * der Veranstaltung.
  */
 @Getter
-@NotNull
 @RequiredArgsConstructor
 public final class LVS {
 

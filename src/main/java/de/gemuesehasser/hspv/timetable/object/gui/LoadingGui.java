@@ -3,6 +3,7 @@ package de.gemuesehasser.hspv.timetable.object.gui;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -37,8 +38,8 @@ public final class LoadingGui extends Gui implements Runnable {
     //<editor-fold desc="CONSTRUCTORS">
 
     /**
-     * Erzeugt eine neue Instanz eines {@link LoadingGui}, welches gleichzeitig eine Instanz eines {@link Gui} darstellt.
-     * Auf diesem undekorierten Fenster wird ein einfacher Ladebildschirm dargestellt.
+     * Erzeugt eine neue Instanz eines {@link LoadingGui}, welches gleichzeitig eine Instanz eines {@link Gui}
+     * darstellt. Auf diesem undekorierten Fenster wird ein einfacher Ladebildschirm dargestellt.
      */
     public LoadingGui() {
         super("", WIDTH, HEIGHT);
@@ -66,13 +67,13 @@ public final class LoadingGui extends Gui implements Runnable {
         final double cos = Math.abs(Math.cos(Math.toRadians(angle)));
         final int w = waitingImage.getWidth();
         final int h = waitingImage.getHeight();
-        final int neww = (int) Math.floor(w*cos + h*sin);
-        final int newh = (int) Math.floor(h*cos + w*sin);
+        final int neww = (int) Math.floor(w * cos + h * sin);
+        final int newh = (int) Math.floor(h * cos + w * sin);
 
         final BufferedImage rotated = new BufferedImage(neww, newh, waitingImage.getType());
         final Graphics2D graphic = rotated.createGraphics();
-        graphic.translate((neww-w)/2, (newh-h)/2);
-        graphic.rotate(Math.toRadians(angle), (double) w /2, (double) h /2);
+        graphic.translate((neww - w) / 2, (newh - h) / 2);
+        graphic.rotate(Math.toRadians(angle), (double) w / 2, (double) h / 2);
         graphic.drawRenderedImage(waitingImage, null);
         graphic.dispose();
         return rotated;

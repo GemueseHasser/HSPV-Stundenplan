@@ -4,13 +4,13 @@ import de.gemuesehasser.hspv.timetable.object.LVS;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+
 import java.awt.*;
 
 /**
- * Ein {@link LvsGui} stellt eine Instanz eines {@link Gui Fensters} dar, in welchem für eine bestimmte Lehrveranstaltung
- * genauere Daten angezeigt werden, als die, die im Stundenplan angezeigt werden.
+ * Ein {@link LvsGui} stellt eine Instanz eines {@link Gui Fensters} dar, in welchem für eine bestimmte
+ * Lehrveranstaltung genauere Daten angezeigt werden, als die, die im Stundenplan angezeigt werden.
  */
-@NotNull
 public final class LvsGui extends Gui {
 
     //<editor-fold desc="CONSTANTS">
@@ -34,9 +34,11 @@ public final class LvsGui extends Gui {
 
 
     //<editor-fold desc="CONSTRUCTORS">
+
     /**
-     * Erzeugt eine neue Instanz eines {@link LvsGui}. Ein {@link LvsGui} stellt eine Instanz eines {@link Gui Fensters} dar, in welchem für eine bestimmte Lehrveranstaltung
-     * genauere Daten angezeigt werden, als die, die im Stundenplan angezeigt werden.
+     * Erzeugt eine neue Instanz eines {@link LvsGui}. Ein {@link LvsGui} stellt eine Instanz eines {@link Gui Fensters}
+     * dar, in welchem für eine bestimmte Lehrveranstaltung genauere Daten angezeigt werden, als die, die im Stundenplan
+     * angezeigt werden.
      *
      * @param lvs Die jeweilige Lehrveranstaltung, auf dessen Grundlage dieses Fenster erzeugt werden soll.
      */

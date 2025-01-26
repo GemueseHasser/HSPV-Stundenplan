@@ -59,8 +59,8 @@ public final class ICalHandler {
      * @param password Das Passwort des Nutzers auf der HSPV-Website.
      */
     public ICalHandler(
-            @NotNull final String username,
-            @NotNull final String password
+        @NotNull final String username,
+        @NotNull final String password
     ) {
         this.username = username;
         this.password = password;
@@ -76,7 +76,7 @@ public final class ICalHandler {
     public int loadICalFile() {
         try {
             final URL timetableUrl = new URL(
-                    "https://mvc.antrago.hspv.nrw.de/teilnehmerportal/Member/Stundenplan/ExportCalendar/download.ics?quelle=Veranstaltung&dataId=-1&year=2025&month=1"
+                "https://mvc.antrago.hspv.nrw.de/teilnehmerportal/Member/Stundenplan/ExportCalendar/download.ics?quelle=Veranstaltung&dataId=-1&year=2025&month=1"
             );
 
             try (final WebClient webClient = new WebClient()) {
@@ -139,7 +139,7 @@ public final class ICalHandler {
      * Objekts der Veranstaltung zurück.
      *
      * @return Eine {@link LinkedHashMap} mit jeweils der Startzeit der jeweiligen Lehrveranstaltung und des jeweiligen
-     * Objekts der Veranstaltung.
+     *     Objekts der Veranstaltung.
      */
     @NotNull
     public LinkedHashMap<LocalDateTime, LVS> getLvs() {
@@ -166,8 +166,9 @@ public final class ICalHandler {
     /**
      * Gibt ein {@link LocalDateTime Datum} auf der Grundlage eines Datums in Form eines {@link String Textes} zurück.
      *
-     * @param date Das Datum in {@link String Textform}, welches als {@link LocalDateTime Datum} formatiert zurückgegeben
-     *             werden soll.
+     * @param date Das Datum in {@link String Textform}, welches als {@link LocalDateTime Datum} formatiert
+     *             zurückgegeben werden soll.
+     *
      * @return Ein {@link LocalDateTime Datum} auf der Grundlage eines Datums in Form eines {@link String Textes}.
      */
     @NotNull

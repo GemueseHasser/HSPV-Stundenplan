@@ -5,6 +5,7 @@ import de.gemuesehasser.hspv.timetable.object.LVS;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -45,8 +46,8 @@ public final class TimetableGui extends Gui {
     //<editor-fold desc="CONSTRUCTORS">
 
     /**
-     * Erzeugt eine neue Instanz eines {@link TimetableGui} auf der Grundlage eines {@link Gui}. Das {@link TimetableGui}
-     * stellt eine Instanz eines {@link Gui} dar, welches den Stundenplan anzeigt.
+     * Erzeugt eine neue Instanz eines {@link TimetableGui} auf der Grundlage eines {@link Gui}. Das
+     * {@link TimetableGui} stellt eine Instanz eines {@link Gui} dar, welches den Stundenplan anzeigt.
      */
     public TimetableGui(@NotNull final String username, @NotNull final LoadingGui loadingGui) {
         super(TITLE + " - " + username, WIDTH, HEIGHT);
@@ -105,7 +106,7 @@ public final class TimetableGui extends Gui {
 
         if (currentLvs.getFirst().getStart().getDayOfWeek() != DayOfWeek.MONDAY) {
             weekStartDate = currentLvs.getFirst().getStart().toLocalDate().minusDays(
-                    currentLvs.getFirst().getStart().getDayOfWeek().getValue() - 1
+                currentLvs.getFirst().getStart().getDayOfWeek().getValue() - 1
             );
         } else {
             weekStartDate = currentLvs.getFirst().getStart().toLocalDate();
@@ -122,7 +123,10 @@ public final class TimetableGui extends Gui {
             final int absoluteDurationInMinutes = (int) Duration.between(lvs.getStart(), lvs.getEnd()).toMinutes();
             final int lvsDurationWithoutBreaks = absoluteDurationInMinutes - ((absoluteDurationInMinutes / 135) * 15);
 
-            final int lvsBeginDuration = (int) Duration.between(lvs.getStart().withHour(8).withMinute(0), lvs.getStart()).toMinutes();
+            final int lvsBeginDuration = (int) Duration.between(
+                lvs.getStart().withHour(8).withMinute(0),
+                lvs.getStart()
+            ).toMinutes();
             final int lvsBeginDurationWithBreaks = lvsBeginDuration - ((lvsBeginDuration / 135) * 15);
 
             final int x = 50 + ((lvs.getStart().getDayOfWeek().getValue() - 1) * 90);
@@ -164,7 +168,12 @@ public final class TimetableGui extends Gui {
 
         for (int i = 0; i < 5; i++) {
             g.drawRect(50 + i * 90, 0, 90, HEIGHT);
-            g.drawString(weekStartDate.plusDays(i).getDayOfWeek().getDisplayName(TextStyle.SHORT_STANDALONE, Locale.GERMANY) + " " + weekStartDate.plusDays(i).getDayOfMonth(), 55 + i * 90, 20);
+            g.drawString(
+                weekStartDate.plusDays(i).getDayOfWeek().getDisplayName(
+                    TextStyle.SHORT_STANDALONE,
+                    Locale.GERMANY
+                ) + " " + weekStartDate.plusDays(i).getDayOfMonth(), 55 + i * 90, 20
+            );
         }
 
         g.drawRect(0, 0, WIDTH, 30);

@@ -5,11 +5,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import javax.swing.*;
+
 import java.awt.*;
 
 /**
- * Ein {@link Gui} stellt die Super-Instanz eines Fensters dar, also die Grundlage, welche genutzt werden kann, um Fenster
- * in einheitlichem Format bzw. mit einheitlichen Eigenschaften zu erzeugen.
+ * Ein {@link Gui} stellt die Super-Instanz eines Fensters dar, also die Grundlage, welche genutzt werden kann, um
+ * Fenster in einheitlichem Format bzw. mit einheitlichen Eigenschaften zu erzeugen.
  */
 @Getter
 public abstract class Gui extends JFrame {
@@ -23,17 +24,18 @@ public abstract class Gui extends JFrame {
     //<editor-fold desc="CONSTRUCTORS">
 
     /**
-     * Erzeugt eine neue Instanz eines {@link Gui} auf der Grundlage eines {@link JFrame}. Ein {@link Gui} stellt die Super-Instanz eines Fensters dar, also die Grundlage, welche genutzt werden kann, um Fenster
-     * in einheitlichem Format bzw. mit einheitlichen Eigenschaften zu erzeugen.
+     * Erzeugt eine neue Instanz eines {@link Gui} auf der Grundlage eines {@link JFrame}. Ein {@link Gui} stellt die
+     * Super-Instanz eines Fensters dar, also die Grundlage, welche genutzt werden kann, um Fenster in einheitlichem
+     * Format bzw. mit einheitlichen Eigenschaften zu erzeugen.
      *
      * @param title  Der Titel, den dieses Fenster haben soll.
      * @param width  Die Breite dieses Fensters.
      * @param height Die Höhe dieses Fensters.
      */
     public Gui(
-            @NotNull final String title,
-            @Range(from = 0, to = Integer.MAX_VALUE) final int width,
-            @Range(from = 0, to = Integer.MAX_VALUE) final int height
+        @NotNull final String title,
+        @Range(from = 0, to = Integer.MAX_VALUE) final int width,
+        @Range(from = 0, to = Integer.MAX_VALUE) final int height
     ) {
         super(title);
         super.setBounds(0, 0, width, height);

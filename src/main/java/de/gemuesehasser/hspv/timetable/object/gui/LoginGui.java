@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,9 +17,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Ein {@link LoginGui} bietet dem Nutzer eine grafische Oberfläche, auf der dieser seinen Benutzernamen und sein Passwort
- * eingeben kann. Von dem diesem Fenster aus wird dann beim Abschicken der Benutzerdaten das {@link LoadingGui} geöffnet und
- * sobald die nötige Datei geladen wurde, wird das {@link TimetableGui} geöffnet.
+ * Ein {@link LoginGui} bietet dem Nutzer eine grafische Oberfläche, auf der dieser seinen Benutzernamen und sein
+ * Passwort eingeben kann. Von dem diesem Fenster aus wird dann beim Abschicken der Benutzerdaten das {@link LoadingGui}
+ * geöffnet und sobald die nötige Datei geladen wurde, wird das {@link TimetableGui} geöffnet.
  */
 public final class LoginGui extends Gui implements KeyListener {
 
@@ -56,9 +57,9 @@ public final class LoginGui extends Gui implements KeyListener {
 
     /**
      * Erzeugt eine neue Instanz eines {@link LoginGui}, welches eine Instanz eines {@link Gui} darstellt. Ein
-     * {@link LoginGui} bietet dem Nutzer eine grafische Oberfläche, auf der dieser seinen Benutzernamen und sein Passwort
-     * eingeben kann. Von dem diesem Fenster aus wird dann beim Abschicken der Benutzerdaten das {@link LoadingGui}
-     * geöffnet und sobald die nötige Datei geladen wurde, wird das {@link TimetableGui} geöffnet.
+     * {@link LoginGui} bietet dem Nutzer eine grafische Oberfläche, auf der dieser seinen Benutzernamen und sein
+     * Passwort eingeben kann. Von dem diesem Fenster aus wird dann beim Abschicken der Benutzerdaten das
+     * {@link LoadingGui} geöffnet und sobald die nötige Datei geladen wurde, wird das {@link TimetableGui} geöffnet.
      *
      * @param error Der Zustand, ob zuvor bereits ein fehlerhafter Login vorgelegen hat.
      */
@@ -84,7 +85,12 @@ public final class LoginGui extends Gui implements KeyListener {
         passwordField.setEchoChar('*');
 
         final JButton loginButton = new JButton("Anmelden");
-        loginButton.setBounds(WIDTH / 2 - (TEXT_FIELD_WIDTH - 30) / 2, 370, TEXT_FIELD_WIDTH - 30, TEXT_FIELD_HEIGHT - 20);
+        loginButton.setBounds(
+            WIDTH / 2 - (TEXT_FIELD_WIDTH - 30) / 2,
+            370,
+            TEXT_FIELD_WIDTH - 30,
+            TEXT_FIELD_HEIGHT - 20
+        );
         loginButton.addActionListener(e -> login());
         loginButton.setFocusable(false);
 

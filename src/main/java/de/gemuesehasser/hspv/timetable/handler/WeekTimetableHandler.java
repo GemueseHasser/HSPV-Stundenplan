@@ -18,10 +18,13 @@ import java.util.Map;
 public final class WeekTimetableHandler {
 
     /**
-     * Filtert die Lehrveranstaltungen einer bestimmten Woche aus allen Lehrveranstaltungen heraus und gibt diese zurück.
+     * Filtert die Lehrveranstaltungen einer bestimmten Woche aus allen Lehrveranstaltungen heraus und gibt diese
+     * zurück.
      *
-     * @param weekAddition Die Anzahl an Wochen, die zu der aktuellen Woche dazuaddiert werden soll, um die Woche zu ermitteln,
-     *                     für die die Lehrveranstaltungen herausgefiltert werden sollen (Negative Wochenzahlen funktionieren auch).
+     * @param weekAddition Die Anzahl an Wochen, die zu der aktuellen Woche dazuaddiert werden soll, um die Woche zu
+     *                     ermitteln, für die die Lehrveranstaltungen herausgefiltert werden sollen (Negative
+     *                     Wochenzahlen funktionieren auch).
+     *
      * @return Die gefilterten Lehrveranstaltungen einer bestimmten Woche aus allen Lehrveranstaltungen.
      */
     public static LinkedList<LVS> getWeekLvs(@Range(from = 0, to = Integer.MAX_VALUE) final int weekAddition) {
@@ -29,8 +32,8 @@ public final class WeekTimetableHandler {
 
         final DayOfWeek currentDay = LocalDate.now().getDayOfWeek();
         final LocalDate begin = LocalDate.now()
-                .minusDays(currentDay.getValue() - 1)
-                .plusDays(weekAddition * 7L);
+            .minusDays(currentDay.getValue() - 1)
+            .plusDays(weekAddition * 7L);
         final LocalDate end = begin.plusDays(5);
 
         for (@NotNull final Map.Entry<LocalDateTime, LVS> lvsEntry : HspvTimetable.getLvsMap().entrySet()) {
