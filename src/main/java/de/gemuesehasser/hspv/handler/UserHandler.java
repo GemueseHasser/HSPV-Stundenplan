@@ -77,7 +77,7 @@ public final class UserHandler {
     @Nullable
     public static String getDecryptedPassword(@NotNull final String username) {
         final StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword(ENCRYPTOR_PASSWORD);
+        encryptor.setPassword(ENCRYPTOR_PASSWORD + username);
         encryptor.setAlgorithm(ENCRYPTOR_ALGORITHM);
         encryptor.setIvGenerator(new RandomIvGenerator());
 
@@ -100,7 +100,7 @@ public final class UserHandler {
      */
     public static void savePassword(@NotNull final String username, @NotNull final String password) {
         final StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword(ENCRYPTOR_PASSWORD);
+        encryptor.setPassword(ENCRYPTOR_PASSWORD + username);
         encryptor.setAlgorithm(ENCRYPTOR_ALGORITHM);
         encryptor.setIvGenerator(new RandomIvGenerator());
 

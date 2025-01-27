@@ -154,18 +154,8 @@ public final class LoginGui extends Gui implements KeyListener {
                 return;
             }
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
-                            "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
-                    "Login fehlgeschlagen",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
             final String password = UserHandler.getDecryptedPassword(username);
             if (password == null) throw new RuntimeException("local password error.");
-
-            System.out.println("..");
 
             if (!password.equals(passwordText)) {
                 new LoginGui(true).open();
@@ -178,6 +168,14 @@ public final class LoginGui extends Gui implements KeyListener {
                 );
                 return;
             }
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
+                            "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
+                    "Login fehlgeschlagen",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
 
         // set timetable
