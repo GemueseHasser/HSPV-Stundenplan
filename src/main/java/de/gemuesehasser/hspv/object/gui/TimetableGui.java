@@ -70,6 +70,8 @@ public final class TimetableGui extends Gui {
 
         final JButton left = new JButton("<");
         left.setBounds(20, HEIGHT - 100, 50, 50);
+        left.setForeground(Color.WHITE);
+        left.setBackground(Color.BLACK);
         left.setFocusable(false);
         left.addActionListener(e -> {
             currentWeek--;
@@ -82,6 +84,8 @@ public final class TimetableGui extends Gui {
 
         final JButton right = new JButton(">");
         right.setBounds(WIDTH - 80, HEIGHT - 100, 50, 50);
+        right.setForeground(Color.WHITE);
+        right.setBackground(Color.BLACK);
         right.setFocusable(false);
         right.addActionListener(e -> {
             currentWeek++;
@@ -178,12 +182,20 @@ public final class TimetableGui extends Gui {
 
     @Override
     public void draw(@NotNull Graphics2D g) {
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+
         g.setColor(Color.BLACK);
         g.drawRect(0, 0, 50, HEIGHT);
+
+        g.setColor(Color.WHITE);
         g.drawString(weekStartDate.getMonth().getDisplayName(TextStyle.SHORT_STANDALONE, Locale.GERMANY), 5, 20);
 
         for (int i = 0; i < 5; i++) {
+            g.setColor(Color.BLACK);
             g.drawRect(50 + i * 90, 0, 90, HEIGHT);
+
+            g.setColor(Color.WHITE);
             g.drawString(
                 weekStartDate.plusDays(i).getDayOfWeek().getDisplayName(
                     TextStyle.SHORT_STANDALONE,
@@ -192,8 +204,10 @@ public final class TimetableGui extends Gui {
             );
         }
 
+        g.setColor(Color.BLACK);
         g.drawRect(0, 0, WIDTH, 30);
         for (int i = 0; i < HEIGHT / 55; i++) {
+            g.setColor(Color.BLACK);
             g.drawRect(0, 30 + i * 55, WIDTH, 55);
 
             final int absoluteMinutePlus = (i * 45) + ((i / 2) * 15 + (i / 6 == 1 ? 15 : 0));
@@ -204,6 +218,7 @@ public final class TimetableGui extends Gui {
             final int hourPlusPlus = (absoluteMinutePlus + 45) / 60;
             final int minutePlusPlus = (absoluteMinutePlus + 45) - hourPlusPlus * 60;
 
+            g.setColor(Color.WHITE);
             g.drawString((8 + hourPlus) + ":" + (minutePlus == 0 ? "00" : minutePlus), 3, 45 + i * 55);
             g.drawString((8 + hourPlusPlus) + ":" + (minutePlusPlus == 0 ? "00" : minutePlusPlus), 3, 80 + i * 55);
         }
