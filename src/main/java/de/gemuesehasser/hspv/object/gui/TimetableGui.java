@@ -29,8 +29,12 @@ public final class TimetableGui extends Gui {
     private static final String TITLE = "HSPV-Stundenplan";
     /** Die Breite dieses Fensters */
     private static final int WIDTH = 550;
+    /** Die optimale Höhe dieses Fensters. */
+    private static final int OPTIMUM_HEIGHT = 800;
+    /** Die Höhe des Bildschirms des Gerätes, auf dem diese Anwendung gestartet wurde. */
+    private static final int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
     /** Die Höhe dieses Fensters. */
-    private static final int HEIGHT = 800;
+    private static final int HEIGHT = (SCREEN_HEIGHT > OPTIMUM_HEIGHT) ? OPTIMUM_HEIGHT : (SCREEN_HEIGHT - 70) - (SCREEN_HEIGHT - 70) % 55;
     //</editor-fold>
 
 
@@ -54,6 +58,9 @@ public final class TimetableGui extends Gui {
      */
     public TimetableGui(@NotNull final String username, @NotNull final LoadingGui loadingGui) {
         super(TITLE + " - " + username, WIDTH, HEIGHT);
+
+        super.setBounds(0, 0, WIDTH, HEIGHT);
+        super.setLocationRelativeTo(null);
         loadingGui.dispose();
 
         currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
@@ -186,7 +193,7 @@ public final class TimetableGui extends Gui {
         }
 
         g.drawRect(0, 0, WIDTH, 30);
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < HEIGHT / 55; i++) {
             g.drawRect(0, 30 + i * 55, WIDTH, 55);
 
             final int absoluteMinutePlus = (i * 45) + ((i / 2) * 15 + (i / 6 == 1 ? 15 : 0));
