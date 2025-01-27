@@ -128,54 +128,13 @@ public final class LoginGui extends Gui implements KeyListener {
 
         if (icalReturnCode == ICalHandler.WRONG_LOGIN) {
             loadingGui.dispose();
-            new LoginGui(true).open();
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Fehlerhafte Anmeldedaten.",
-                    "Login fehlgeschlagen",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            wrongLoginData();
             return;
         }
 
         if (icalReturnCode == ICalHandler.NO_CONNECTION_ERROR) {
             loadingGui.dispose();
-
-            if (!UserHandler.exists(username)) {
-                new LoginGui(true).open();
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Es konnte keine Verbindung hergestellt werden.",
-                        "Login fehlgeschlagen",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                return;
-            }
-
-            final String password = UserHandler.getDecryptedPassword(username);
-            if (password == null) throw new RuntimeException("local password error.");
-
-            if (!password.equals(passwordText)) {
-                new LoginGui(true).open();
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Fehlerhafte Anmeldedaten.",
-                        "Login fehlgeschlagen",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                return;
-            }
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
-                            "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
-                    "Login fehlgeschlagen",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            if (!noInternetConnection(username, passwordText)) return;
         }
 
         // set timetable
@@ -186,6 +145,60 @@ public final class LoginGui extends Gui implements KeyListener {
 
         // save password
         UserHandler.savePassword(username, passwordText);
+    }
+
+    /**
+     * Die ausgelagerte Aktion, die ausgeführt wird, wenn der Login wegen falscher Anmeldedaten fehlschlägt.
+     */
+    private void wrongLoginData() {
+        new LoginGui(true).open();
+
+        JOptionPane.showMessageDialog(
+                null,
+                "Fehlerhafte Anmeldedaten.",
+                "Login fehlgeschlagen",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    /**
+     * Die ausgelagerte Aktion, die ausgeführt wird, wenn keine Internetverbindung hergestellt werden kann.
+     *
+     * @param username      Der Benutzername des Nutzers.
+     * @param passwordText  Das Passwort des Nutzers.
+     *
+     * @return Wenn die Methode frühzeitig abgebrochen wurde {@code false} und bei vollständiger Ausführung {@code true}.
+     */
+    private boolean noInternetConnection(@NotNull final String username, @NotNull final String passwordText) {
+        if (!UserHandler.exists(username)) {
+            new LoginGui(true).open();
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Es konnte keine Verbindung hergestellt werden.",
+                    "Login fehlgeschlagen",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return false;
+        }
+
+        final String password = UserHandler.getDecryptedPassword(username);
+        if (password == null) throw new RuntimeException("local password error.");
+
+        if (!password.equals(passwordText)) {
+            wrongLoginData();
+            return false;
+        }
+
+        JOptionPane.showMessageDialog(
+                null,
+                "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
+                        "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
+                "Login fehlgeschlagen",
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        return true;
     }
 
     //<editor-fold desc="implementation">
