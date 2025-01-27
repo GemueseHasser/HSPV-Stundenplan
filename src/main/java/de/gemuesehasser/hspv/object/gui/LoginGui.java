@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -162,12 +161,33 @@ public final class LoginGui extends Gui implements KeyListener {
                     "Login fehlgeschlagen",
                     JOptionPane.ERROR_MESSAGE
             );
+
+            final String password = UserHandler.getDecryptedPassword(username);
+            if (password == null) throw new RuntimeException("local password error.");
+
+            System.out.println("..");
+
+            if (!password.equals(passwordText)) {
+                new LoginGui(true).open();
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Fehlerhafte Anmeldedaten.",
+                        "Login fehlgeschlagen",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
         }
 
+        // set timetable
         Timetable.setLvsMap(iCalHandler.getLvs());
 
         final TimetableGui timetableGui = new TimetableGui(username, loadingGui);
         timetableGui.open();
+
+        // save password
+        UserHandler.savePassword(username, passwordText);
     }
 
     //<editor-fold desc="implementation">

@@ -18,6 +18,10 @@
 
     <repositories>
         <repository>
+            <id>JASYPT</id>
+            <url>https://mvnrepository.com/artifact/org.jasypt/jasypt</url>
+        </repository>
+        <repository>
             <id>Ical4j</id>
             <url>https://mvnrepository.com/artifact/org.mnode.ical4j/ical4j</url>
         </repository>
@@ -36,6 +40,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+            <version>1.9.3</version>
+        </dependency>
         <dependency>
             <groupId>org.mnode.ical4j</groupId>
             <artifactId>ical4j</artifactId>

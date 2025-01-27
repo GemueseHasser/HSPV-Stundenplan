@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 
@@ -13,6 +15,11 @@ import java.util.LinkedHashMap;
  * Die Haupt- und Main-Klasse der HSPV-Stundenplan Anwendung.
  */
 public class Timetable {
+
+    //<editor-fold desc="CONSTANTS">
+    /** Der Cache-Ordner dieser Anwendung, in welcher die Benutzer-Dateien gespeichert werden. */
+    public static final String CACHE_FOLDER = System.getProperty("user.home") + File.separator + ".timetable_cache";
+    //</editor-fold>
 
     //<editor-fold desc="STATIC FIELDS">
     /** Alle geladenen Lehrveranstaltungen aus der aktuellen ICS-Datei. */
@@ -29,7 +36,13 @@ public class Timetable {
      *
      * @param args Die Argumente, die von der JRE beim Ausführen dieser Main-Methode übergeben werden.
      */
-    public static void main(@NotNull final String @NotNull [] args) {
+    public static void main(@NotNull final String @NotNull [] args) throws IOException {
+        final File dataFile = new File(CACHE_FOLDER + File.separator + "data.properties");
+
+        if (!dataFile.exists()) {
+            dataFile.createNewFile();
+        }
+
         final LoginGui loginGui = new LoginGui(false);
         loginGui.open();
     }
