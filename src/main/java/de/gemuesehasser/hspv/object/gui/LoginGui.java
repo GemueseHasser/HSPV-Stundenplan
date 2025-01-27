@@ -2,6 +2,7 @@ package de.gemuesehasser.hspv.object.gui;
 
 import de.gemuesehasser.hspv.Timetable;
 import de.gemuesehasser.hspv.handler.ICalHandler;
+import de.gemuesehasser.hspv.handler.UserHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
@@ -126,34 +127,41 @@ public final class LoginGui extends Gui implements KeyListener {
         final ICalHandler iCalHandler = new ICalHandler(username, passwordText);
         final int icalReturnCode = iCalHandler.loadICalFile();
 
-        if (icalReturnCode != ICalHandler.NO_ERROR) {
+        if (icalReturnCode == ICalHandler.WRONG_LOGIN) {
             loadingGui.dispose();
             new LoginGui(true).open();
 
-            switch (icalReturnCode) {
-                case ICalHandler.WRONG_LOGIN:
-                    JOptionPane.showMessageDialog(
-                        null,
-                        "Fehlerhafte Anmeldedaten.",
-                        "Login fehlgeschlagen",
-                        JOptionPane.ERROR_MESSAGE
-                    );
-                    break;
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Fehlerhafte Anmeldedaten.",
+                    "Login fehlgeschlagen",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
 
-                case ICalHandler.NO_CONNECTION_ERROR:
-                    JOptionPane.showMessageDialog(
+        if (icalReturnCode == ICalHandler.NO_CONNECTION_ERROR) {
+            loadingGui.dispose();
+
+            if (!UserHandler.exists(username)) {
+                new LoginGui(true).open();
+
+                JOptionPane.showMessageDialog(
                         null,
                         "Es konnte keine Verbindung hergestellt werden.",
                         "Login fehlgeschlagen",
                         JOptionPane.ERROR_MESSAGE
-                    );
-                    break;
-
-                default:
-                    break;
+                );
+                return;
             }
 
-            return;
+            JOptionPane.showMessageDialog(
+                    null,
+                    "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
+                            "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
+                    "Login fehlgeschlagen",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
 
         Timetable.setLvsMap(iCalHandler.getLvs());

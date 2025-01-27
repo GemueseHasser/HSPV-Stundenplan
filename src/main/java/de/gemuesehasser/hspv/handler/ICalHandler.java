@@ -12,14 +12,13 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.CalendarComponent;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
@@ -81,7 +80,14 @@ public final class ICalHandler {
                 "https://mvc.antrago.hspv.nrw.de/teilnehmerportal/Member/Stundenplan/ExportCalendar/download.ics?quelle=Veranstaltung&dataId=-1&year=2025&month=1"
             );
 
-            if (!isConnectionPreset()) {
+            if (!isConnectionPresent()) {
+                if (UserHandler.exists(username)) {
+                    final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
+                    final CalendarBuilder builder = new CalendarBuilder();
+                    this.calendar = builder.build(calenderInput);
+                    System.out.println("local calender built with local timetable.");
+                }
+
                 return NO_CONNECTION_ERROR;
             }
 
@@ -118,20 +124,14 @@ public final class ICalHandler {
                 response.defaultCharsetUtf8();
                 System.out.println("get response from antrago calender");
 
-                final File file = new File(".stundenplan.ics");
-                if (file.delete()) {
-                    file.createNewFile();
-                }
-                FileUtils.writeStringToFile(file, response.getContentAsString(), StandardCharsets.UTF_8);
+                UserHandler.saveTimetable(username, response.getContentAsString());
                 System.out.println("download completed from antrago.");
             }
 
-            final File file = new File(".stundenplan.ics");
-            final FileInputStream calenderInput = new FileInputStream(file);
+            final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
             final CalendarBuilder builder = new CalendarBuilder();
             this.calendar = builder.build(calenderInput);
-            System.out.println("local calender builded.");
-            file.deleteOnExit();
+            System.out.println("local calender built.");
         } catch (@NotNull final IOException | ParserException e) {
             throw new RuntimeException(e);
         }
@@ -191,35 +191,25 @@ public final class ICalHandler {
      *
      * @return Wenn eine Internetverbindung besteht {@code true}, ansonsten {@code false}.
      */
-    private static boolean isConnectionPreset() {
+    private static boolean isConnectionPresent() {
         return isHostReachable("google.de") || isHostReachable("amazon.de")
             || isHostReachable("apple.com") || isHostReachable("github.com");
     }
 
     /**
-     * Prüft, ob ein bestimmter Host erreichbar ist, indem dieser angepingt wird.
+     * Prüft, ob eine Verbindung zu einem bestimmten Host hergestellt werden kann.
      *
-     * @param host Der Host, welcher angepingt werden und damit auf Erreichbarkeit geprüft werden soll.
+     * @param host Der Host, welcher überprüft werden soll.
      *
-     * @return Wenn dieser Host erreichbar ist, indem dieser angepingt wird, {@code true}, ansonsten {@code false}.
+     * @return Wenn dieser Host erreichbar ist, {@code true}, ansonsten {@code false}.
      */
     private static boolean isHostReachable(final String host) {
-        try {
-            final String cmd;
+        try (final Socket socket = new Socket()) {
+            final InetSocketAddress address = new InetSocketAddress(host, 80);
+            socket.connect(address, 1000);
 
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                // For Windows
-                cmd = "ping -n 1 " + host;
-            } else {
-                // For Linux and OSX
-                cmd = "ping -c 1 " + host;
-            }
-
-            final Process pingProcess = Runtime.getRuntime().exec(cmd);
-            pingProcess.waitFor();
-
-            return pingProcess.exitValue() == 0;
-        } catch (InterruptedException | IOException e) {
+            return true;
+        } catch (@NotNull final IOException ignored) {
             return false;
         }
     }
