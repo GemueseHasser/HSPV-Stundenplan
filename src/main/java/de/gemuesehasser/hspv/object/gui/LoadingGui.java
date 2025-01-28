@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.imageio.ImageIO;
 
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -44,6 +45,7 @@ public final class LoadingGui extends Gui implements Runnable {
     public LoadingGui() {
         super("", WIDTH, HEIGHT);
         super.setUndecorated(true);
+        super.setShape(new RoundRectangle2D.Double(0, 0, WIDTH, HEIGHT, 30, 30));
 
         try {
             waitingImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/loading.png")));
@@ -90,7 +92,7 @@ public final class LoadingGui extends Gui implements Runnable {
 
     @Override
     public void run() {
-        if (angle >= 365) angle = 0;
+        if (angle >= 360) angle = 0;
 
         angle += 2;
     }
