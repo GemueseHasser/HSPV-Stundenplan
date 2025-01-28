@@ -194,7 +194,7 @@ public final class LoginGui extends Gui implements KeyListener {
                 null,
                 "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
                         "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
-                "Login fehlgeschlagen",
+                "Keine Verbindung zum Server",
                 JOptionPane.ERROR_MESSAGE
         );
 
