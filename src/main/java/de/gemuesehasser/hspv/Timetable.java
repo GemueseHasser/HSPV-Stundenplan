@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 
@@ -18,7 +20,7 @@ public class Timetable {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Cache-Ordner dieser Anwendung, in welcher die Benutzer-Dateien gespeichert werden. */
-    public static final String CACHE_FOLDER = System.getProperty("user.home") + File.separator + ".timetable_cache";
+    public static final String CACHE_FOLDER = System.getProperty("user.home") + File.separator + ".stundenplan_cache";
     //</editor-fold>
 
     //<editor-fold desc="STATIC FIELDS">
@@ -39,6 +41,7 @@ public class Timetable {
     public static void main(@NotNull final String @NotNull [] args) throws IOException {
         final File dataFile = new File(CACHE_FOLDER + File.separator + "data.properties");
 
+        Files.createDirectories(Path.of(CACHE_FOLDER));
         if (!dataFile.exists()) {
             dataFile.createNewFile();
         }
