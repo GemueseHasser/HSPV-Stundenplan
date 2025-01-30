@@ -76,8 +76,12 @@ public final class ICalHandler {
      */
     public int loadICalFile() {
         try {
-            final URL timetableUrl = new URL(
+            final URL timetableUrlMember = new URL(
                 "https://mvc.antrago.hspv.nrw.de/teilnehmerportal/Member/Stundenplan/ExportCalendar/download.ics?quelle=Veranstaltung&dataId=-1&year=2025&month=1"
+            );
+
+            final URL timetableUrlLecturer = new URL(
+                    "https://mvc.antrago.hspv.nrw.de/docentIcsDownloadLink"
             );
 
             if (!isConnectionPresent()) {
@@ -115,17 +119,19 @@ public final class ICalHandler {
 
                 try {
                     final HtmlAnchor lvsAnchor = tools.getAnchorByText("Lehrveranstaltungsplan");
-                    lvsAnchor.click();
+                    final HtmlPage antragoPage = lvsAnchor.click();
+
+                    final WebResponse response = webClient.getPage(
+                            antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
+                    ).getWebResponse();
+                    response.defaultCharsetUtf8();
+                    System.out.println("get response from antrago calender");
+
+                    UserHandler.saveTimetable(username, response.getContentAsString());
+                    System.out.println("download completed from antrago.");
                 } catch (@NotNull final ElementNotFoundException ignored) {
                     return WRONG_LOGIN;
                 }
-
-                final WebResponse response = webClient.getPage(timetableUrl).getWebResponse();
-                response.defaultCharsetUtf8();
-                System.out.println("get response from antrago calender");
-
-                UserHandler.saveTimetable(username, response.getContentAsString());
-                System.out.println("download completed from antrago.");
             }
 
             final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
