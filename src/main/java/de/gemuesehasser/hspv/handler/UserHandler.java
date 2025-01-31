@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Properties;
 
 /**
  * Mithilfe des {@link UserHandler} lässt sich ein bestimmter Benutzer und dessen Stundenplan laden, abspeichern und
@@ -71,7 +72,6 @@ public final class UserHandler {
      * dieses zurück.
      *
      * @param username Der Benutzername des Nutzers, dessen Passwort abgefragt wird.
-     *
      * @return Das entschlüsselte Passwort des Benutzers, welches zuvor aus der PROPERTIES-Datei geladen wurde.
      */
     @Nullable
@@ -105,13 +105,64 @@ public final class UserHandler {
         encryptor.setIvGenerator(new RandomIvGenerator());
 
         final EncryptableProperties properties = new EncryptableProperties(encryptor);
+        final String dataPath = Timetable.CACHE_FOLDER + File.separator + "data.properties";
+
         try {
-            final String dataPath = Timetable.CACHE_FOLDER + File.separator + "data.properties";
             properties.load(new FileInputStream(dataPath));
             properties.setProperty(username, encryptor.encrypt(password));
             properties.store(new FileOutputStream(dataPath), null);
-        } catch (IOException e) {
+        } catch (@NotNull final IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Speichert eine gewisse Individualisierung eines Benutzers in der Konfigurationsdatei ab.
+     *
+     * @param username      Der Benutzername des Nutzers, für den eine gewisse Individualisierung abgespeichert werden soll.
+     * @param path          Der Pfad, unter dem diese Individualisierung abgespeichert werden soll in der Konfigurationsdatei.
+     * @param configuration Die Konfiguration in Form eines Textes, die abgespeichert werden soll.
+     */
+    public static void saveConfiguration(
+            @NotNull final String username,
+            @NotNull final String path,
+            @NotNull final String configuration
+    ) {
+        final Properties configurations = new Properties();
+        final String configPath = Timetable.CACHE_FOLDER + File.separator + "config.properties";
+
+        try {
+            configurations.load(new FileInputStream(configPath));
+            configurations.setProperty(username + "." + path, configuration);
+            configurations.store(new FileOutputStream(configPath), null);
+        } catch (@NotNull final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gibt eine gewisse Individualisierung für einen bestimmten Nutzer aus der Konfigurationsdatei zurück. Falls diese
+     * Individualisierung nicht vorhanden ist, wird {@code null} zurückgegeben.
+     *
+     * @param username Der Benutzername des Nutzers, für den die Individualisierung zurückgegeben werden soll.
+     * @param path     Der Pfad unter dem diese Individualisierung in der Konfigurationsdatei zu finden ist.
+     *
+     * @return eine gewisse Individualisierung für einen bestimmten Nutzer aus der Konfigurationsdatei zurück. Falls diese
+     * Individualisierung nicht vorhanden ist, {@code null}.
+     */
+    @Nullable
+    public static String getConfiguration(
+            @NotNull final String username,
+            @NotNull final String path
+    ) {
+        final Properties configurations = new Properties();
+        final String configPath = Timetable.CACHE_FOLDER + File.separator + "config.properties";
+
+        try {
+            configurations.load(new FileInputStream(configPath));
+            return configurations.getProperty(username + "." + path);
+        } catch (@NotNull final IOException e) {
+            return null;
         }
     }
     //</editor-fold>

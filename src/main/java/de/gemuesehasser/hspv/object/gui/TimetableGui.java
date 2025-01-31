@@ -1,5 +1,6 @@
 package de.gemuesehasser.hspv.object.gui;
 
+import de.gemuesehasser.hspv.handler.UserHandler;
 import de.gemuesehasser.hspv.handler.WeekTimetableHandler;
 import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.component.LvsButton;
@@ -43,6 +44,8 @@ public final class TimetableGui extends Gui implements KeyListener {
     //<editor-fold desc="LOCAL FIELDS">
     /** Alle Buttons, der aktuellen Lehrveranstaltungen, die angezeigt werden in der aktuellen Woche. */
     private final List<JButton> lvsButtons = new ArrayList<>();
+    /** Der Benutzername des Nutzers, für den der Stundenplan geladen wird. */
+    private final String username;
     /** Eine Liste, der aktuellen Lehrveranstaltungen der aktuellen Woche. */
     private LinkedList<LVS> currentLvs;
     /** Das Datum, an welchem die aktuelle Woche startet (jeweils der Montag der Woche). */
@@ -65,18 +68,19 @@ public final class TimetableGui extends Gui implements KeyListener {
         super.setLocationRelativeTo(null);
         loadingGui.dispose();
 
-        currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
-        weekStartDate = currentLvs.getFirst().getStart().toLocalDate();
+        this.username = username;
+        this.currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
+        this.weekStartDate = currentLvs.getFirst().getStart().toLocalDate();
 
         loadLvsButtons();
 
         final JButton left = getWeekSwitchButton("<");
         left.setBounds(45, HEIGHT - 100, 50, 50);
-        left.addActionListener(e -> switchCurrentWeek(-1));
+        left.addActionListener(e -> loadWeek(-1));
 
         final JButton right = getWeekSwitchButton(">");
         right.setBounds(WIDTH - 80, HEIGHT - 100, 50, 50);
-        right.addActionListener(e -> switchCurrentWeek(1));
+        right.addActionListener(e -> loadWeek(1));
 
         super.add(left);
         super.add(right);
@@ -85,32 +89,14 @@ public final class TimetableGui extends Gui implements KeyListener {
 
 
     /**
-     * Erzeugt einen neuen {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise
-     * formatiert ist, sodass dieser visuell zum {@link TimetableGui} passt.
-     *
-     * @param text Der Text, der auf diesem Button angezeigt werden soll.
-     *
-     * @return Ein neuer {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise formatiert ist,
-     * sodass dieser visuell zum {@link TimetableGui} passt.
-     */
-    private JButton getWeekSwitchButton(final String text) {
-        final JButton button = new JButton(text);
-        button.setForeground(Color.WHITE);
-        button.setBackground(Color.BLACK);
-        button.setFocusable(false);
-
-        return button;
-    }
-
-    /**
      * Wechselt die aktuelle Woche in diesem {@link TimetableGui}, die angezeigt wird. Dabei werden die LVS der Woche neu
      * geladen und das Fenster wird komplett neu gezeichnet.
      *
-     * @param amount Die Anzahl an Wochen, um die die aktuelle Woche geändert werden soll. Dabei funktionieren positive
-     *               und auch negative ganze Zahlen.
+     * @param weekAddition Die Anzahl an Wochen, um die die aktuelle Woche geändert werden soll. Dabei funktionieren positive
+     *                     und auch negative ganze Zahlen.
      */
-    private void switchCurrentWeek(final int amount) {
-        currentWeek += amount;
+    public void loadWeek(final int weekAddition) {
+        currentWeek += weekAddition;
         this.currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
         super.remove(super.getDraw());
         reloadLvsButtons();
@@ -176,6 +162,12 @@ public final class TimetableGui extends Gui implements KeyListener {
                 break;
             }
 
+            final String colorRgb = UserHandler.getConfiguration(username, "color." + description);
+
+            if (colorRgb != null) {
+                lvs.setColor(new Color(Integer.parseInt(colorRgb)));
+            }
+
             final LvsButton button = new LvsButton(
                 "<html><a style='margin: 20px'>" + description + "<br><br>" + (Objects.equals(
                     room,
@@ -184,14 +176,32 @@ public final class TimetableGui extends Gui implements KeyListener {
                 25
             );
             button.setBounds(x, y, width, height);
-            button.setBackground(Color.LIGHT_GRAY);
+            button.setBackground(lvs.getColor());
             button.setFocusable(false);
             button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-            button.addActionListener(e -> new LvsGui(lvs).open());
+            button.addActionListener(e -> new LvsGui(this, lvs, username).open());
 
             this.lvsButtons.add(button);
             super.add(button);
         }
+    }
+
+    /**
+     * Erzeugt einen neuen {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise
+     * formatiert ist, sodass dieser visuell zum {@link TimetableGui} passt.
+     *
+     * @param text Der Text, der auf diesem Button angezeigt werden soll.
+     *
+     * @return Ein neuer {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise formatiert ist,
+     * sodass dieser visuell zum {@link TimetableGui} passt.
+     */
+    private JButton getWeekSwitchButton(final String text) {
+        final JButton button = new JButton(text);
+        button.setForeground(Color.WHITE);
+        button.setBackground(Color.BLACK);
+        button.setFocusable(false);
+
+        return button;
     }
 
     //<editor-fold desc="implementation">
@@ -251,10 +261,10 @@ public final class TimetableGui extends Gui implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                switchCurrentWeek(-1);
+                loadWeek(-1);
                 break;
             case KeyEvent.VK_RIGHT:
-                switchCurrentWeek(1);
+                loadWeek(1);
                 break;
 
             default:

@@ -18,6 +18,10 @@
 
     <repositories>
         <repository>
+            <id>Color-Picker</id>
+            <url>https://mvnrepository.com/artifact/org.drjekyll/colorpicker</url>
+        </repository>
+        <repository>
             <id>JASYPT</id>
             <url>https://mvnrepository.com/artifact/org.jasypt/jasypt</url>
         </repository>
@@ -40,6 +44,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.drjekyll</groupId>
+            <artifactId>colorpicker</artifactId>
+            <version>2.0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>

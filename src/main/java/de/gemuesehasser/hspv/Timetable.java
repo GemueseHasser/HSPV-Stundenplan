@@ -40,10 +40,14 @@ public class Timetable {
      */
     public static void main(@NotNull final String @NotNull [] args) throws IOException {
         final File dataFile = new File(CACHE_FOLDER + File.separator + "data.properties");
+        final File configFile = new File(CACHE_FOLDER + File.separator + "config.properties");
 
         Files.createDirectories(Path.of(CACHE_FOLDER));
         if (!dataFile.exists()) {
             dataFile.createNewFile();
+        }
+        if (!configFile.exists()) {
+            configFile.createNewFile();
         }
 
         final LoginGui loginGui = new LoginGui(false);
