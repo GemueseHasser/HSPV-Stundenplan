@@ -135,18 +135,18 @@ public final class TimetableGui extends Gui {
     private void loadLvsButtons() {
         for (@NotNull final LVS lvs : currentLvs) {
             final int absoluteDurationInMinutes = (int) Duration.between(lvs.getStart(), lvs.getEnd()).toMinutes();
-            final int lvsDurationWithoutBreaks = absoluteDurationInMinutes - ((absoluteDurationInMinutes / 135) * 15);
+            final int lvsDurationWithoutBreaks = ((absoluteDurationInMinutes - (absoluteDurationInMinutes / 135 * 15)) / 45) * 45;
 
             final int lvsBeginDuration = (int) Duration.between(
                 lvs.getStart().withHour(8).withMinute(0),
                 lvs.getStart()
             ).toMinutes();
-            final int lvsBeginDurationWithBreaks = lvsBeginDuration - ((lvsBeginDuration / 135) * 15);
+            final int lvsBeginDurationWithoutBreaks = ((lvsBeginDuration - (lvsBeginDuration / 135 * 15)) / 45) * 45;
 
             final int x = 50 + ((lvs.getStart().getDayOfWeek().getValue() - 1) * 90);
-            final int y = 30 + (lvsBeginDurationWithBreaks / 45) * 55;
+            final int y = 30 + (lvsBeginDurationWithoutBreaks / 45) * 55 + ((lvsBeginDurationWithoutBreaks / 90) * 15) + (lvsBeginDurationWithoutBreaks / 270 == 1 ? 15 : 0);
             final int width = 90;
-            final int height = (lvsDurationWithoutBreaks / 45) * 55;
+            final int height = (lvsDurationWithoutBreaks / 45) * 55 + (absoluteDurationInMinutes - lvsDurationWithoutBreaks);
 
             assert lvs.getDescription() != null;
             final String[] descriptionParts = lvs.getDescription().split("\n");
@@ -207,10 +207,12 @@ public final class TimetableGui extends Gui {
         g.setColor(Color.BLACK);
         g.drawRect(0, 0, WIDTH, 30);
         for (int i = 0; i < HEIGHT / 55; i++) {
-            g.setColor(Color.BLACK);
-            g.drawRect(0, 30 + i * 55, WIDTH, 55);
+            final int breakAddition = (i / 2) * 15 + (i / 6 == 1 ? 15 : 0);
 
-            final int absoluteMinutePlus = (i * 45) + ((i / 2) * 15 + (i / 6 == 1 ? 15 : 0));
+            g.setColor(Color.BLACK);
+            g.drawRect(0, 30 + i * 55 + breakAddition, WIDTH, 55);
+
+            final int absoluteMinutePlus = (i * 45) + breakAddition;
 
             final int hourPlus = absoluteMinutePlus / 60;
             final int minutePlus = absoluteMinutePlus - hourPlus * 60;
@@ -219,8 +221,8 @@ public final class TimetableGui extends Gui {
             final int minutePlusPlus = (absoluteMinutePlus + 45) - hourPlusPlus * 60;
 
             g.setColor(Color.WHITE);
-            g.drawString((8 + hourPlus) + ":" + (minutePlus == 0 ? "00" : minutePlus), 3, 45 + i * 55);
-            g.drawString((8 + hourPlusPlus) + ":" + (minutePlusPlus == 0 ? "00" : minutePlusPlus), 3, 80 + i * 55);
+            g.drawString((8 + hourPlus) + ":" + (minutePlus == 0 ? "00" : minutePlus), 3, 45 + i * 55 + breakAddition);
+            g.drawString((8 + hourPlusPlus) + ":" + (minutePlusPlus == 0 ? "00" : minutePlusPlus), 3, 80 + i * 55 + breakAddition);
         }
     }
     //</editor-fold>
