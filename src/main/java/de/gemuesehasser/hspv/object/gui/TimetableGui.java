@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -22,7 +24,7 @@ import java.util.Objects;
 /**
  * Das {@link TimetableGui} stellt eine Instanz eines {@link Gui} dar, welches den Stundenplan anzeigt.
  */
-public final class TimetableGui extends Gui {
+public final class TimetableGui extends Gui implements KeyListener {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Titel dieses Fensters. */
@@ -58,7 +60,7 @@ public final class TimetableGui extends Gui {
      */
     public TimetableGui(@NotNull final String username, @NotNull final LoadingGui loadingGui) {
         super(TITLE + " - " + username, WIDTH, HEIGHT);
-
+        super.addKeyListener(this);
         super.setBounds(0, 0, WIDTH, HEIGHT);
         super.setLocationRelativeTo(null);
         loadingGui.dispose();
@@ -68,39 +70,53 @@ public final class TimetableGui extends Gui {
 
         loadLvsButtons();
 
-        final JButton left = new JButton("<");
-        left.setBounds(20, HEIGHT - 100, 50, 50);
-        left.setForeground(Color.WHITE);
-        left.setBackground(Color.BLACK);
-        left.setFocusable(false);
-        left.addActionListener(e -> {
-            currentWeek--;
-            this.currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
-            super.remove(super.getDraw());
-            reloadLvsButtons();
-            super.repaint();
-            super.add(super.getDraw());
-        });
+        final JButton left = getWeekSwitchButton("<");
+        left.setBounds(45, HEIGHT - 100, 50, 50);
+        left.addActionListener(e -> switchCurrentWeek(-1));
 
-        final JButton right = new JButton(">");
+        final JButton right = getWeekSwitchButton(">");
         right.setBounds(WIDTH - 80, HEIGHT - 100, 50, 50);
-        right.setForeground(Color.WHITE);
-        right.setBackground(Color.BLACK);
-        right.setFocusable(false);
-        right.addActionListener(e -> {
-            currentWeek++;
-            this.currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
-            super.remove(super.getDraw());
-            reloadLvsButtons();
-            super.repaint();
-            super.add(super.getDraw());
-        });
+        right.addActionListener(e -> switchCurrentWeek(1));
 
         super.add(left);
         super.add(right);
     }
     //</editor-fold>
 
+
+    /**
+     * Erzeugt einen neuen {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise
+     * formatiert ist, sodass dieser visuell zum {@link TimetableGui} passt.
+     *
+     * @param text Der Text, der auf diesem Button angezeigt werden soll.
+     *
+     * @return Ein neuer {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise formatiert ist,
+     * sodass dieser visuell zum {@link TimetableGui} passt.
+     */
+    private JButton getWeekSwitchButton(final String text) {
+        final JButton button = new JButton(text);
+        button.setForeground(Color.WHITE);
+        button.setBackground(Color.BLACK);
+        button.setFocusable(false);
+
+        return button;
+    }
+
+    /**
+     * Wechselt die aktuelle Woche in diesem {@link TimetableGui}, die angezeigt wird. Dabei werden die LVS der Woche neu
+     * geladen und das Fenster wird komplett neu gezeichnet.
+     *
+     * @param amount Die Anzahl an Wochen, um die die aktuelle Woche geändert werden soll. Dabei funktionieren positive
+     *               und auch negative ganze Zahlen.
+     */
+    private void switchCurrentWeek(final int amount) {
+        currentWeek += amount;
+        this.currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
+        super.remove(super.getDraw());
+        reloadLvsButtons();
+        super.repaint();
+        super.add(super.getDraw());
+    }
 
     /**
      * Lädt alle Buttons, welche für das Abbilden der Lehrveranstaltungen genutzt werden neu.
@@ -224,6 +240,31 @@ public final class TimetableGui extends Gui {
             g.drawString((8 + hourPlus) + ":" + (minutePlus == 0 ? "00" : minutePlus), 3, 45 + i * 55 + breakAddition);
             g.drawString((8 + hourPlusPlus) + ":" + (minutePlusPlus == 0 ? "00" : minutePlusPlus), 3, 80 + i * 55 + breakAddition);
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                switchCurrentWeek(-1);
+                break;
+            case KeyEvent.VK_RIGHT:
+                switchCurrentWeek(1);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
     //</editor-fold>
 }
