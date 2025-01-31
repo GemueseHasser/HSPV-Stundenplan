@@ -108,7 +108,7 @@ public final class LoginGui extends Gui implements KeyListener {
         loadingGui.open();
         super.dispose();
 
-        Executors.newScheduledThreadPool(1).schedule(this::loginAttemp, 1, TimeUnit.SECONDS);
+        Executors.newScheduledThreadPool(1).schedule(this::loginAttemp, 100, TimeUnit.MILLISECONDS);
     }
 
     /**
