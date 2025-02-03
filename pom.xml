@@ -22,10 +22,6 @@
             <url>https://mvnrepository.com/artifact/org.drjekyll/colorpicker</url>
         </repository>
         <repository>
-            <id>JASYPT</id>
-            <url>https://mvnrepository.com/artifact/org.jasypt/jasypt</url>
-        </repository>
-        <repository>
             <id>Ical4j</id>
             <url>https://mvnrepository.com/artifact/org.mnode.ical4j/ical4j</url>
         </repository>
@@ -48,11 +44,6 @@
             <groupId>org.drjekyll</groupId>
             <artifactId>colorpicker</artifactId>
             <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
-            <version>1.9.3</version>
         </dependency>
         <dependency>
             <groupId>org.mnode.ical4j</groupId>

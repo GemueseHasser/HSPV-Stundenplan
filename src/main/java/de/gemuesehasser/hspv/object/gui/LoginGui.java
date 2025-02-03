@@ -2,6 +2,7 @@ package de.gemuesehasser.hspv.object.gui;
 
 import de.gemuesehasser.hspv.Timetable;
 import de.gemuesehasser.hspv.handler.ICalHandler;
+import de.gemuesehasser.hspv.handler.PasswordHandler;
 import de.gemuesehasser.hspv.handler.UserHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -144,7 +145,7 @@ public final class LoginGui extends Gui implements KeyListener {
         timetableGui.open();
 
         // save password
-        UserHandler.savePassword(username, passwordText);
+        PasswordHandler.saveHashedPassword(username, passwordText);
     }
 
     /**
@@ -182,10 +183,7 @@ public final class LoginGui extends Gui implements KeyListener {
             return false;
         }
 
-        final String password = UserHandler.getDecryptedPassword(username);
-        if (password == null) throw new RuntimeException("local password error.");
-
-        if (!password.equals(passwordText)) {
+        if (!PasswordHandler.validatePassword(username, passwordText)) {
             wrongLoginData();
             return false;
         }
