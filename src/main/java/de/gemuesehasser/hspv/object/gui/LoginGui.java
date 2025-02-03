@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -155,30 +156,31 @@ public final class LoginGui extends Gui implements KeyListener {
         new LoginGui(true).open();
 
         JOptionPane.showMessageDialog(
-                null,
-                "Fehlerhafte Anmeldedaten.",
-                "Login fehlgeschlagen",
-                JOptionPane.ERROR_MESSAGE
+            null,
+            "Fehlerhafte Anmeldedaten.",
+            "Login fehlgeschlagen",
+            JOptionPane.ERROR_MESSAGE
         );
     }
 
     /**
      * Die ausgelagerte Aktion, die ausgeführt wird, wenn keine Internetverbindung hergestellt werden kann.
      *
-     * @param username      Der Benutzername des Nutzers.
-     * @param passwordText  Das Passwort des Nutzers.
+     * @param username     Der Benutzername des Nutzers.
+     * @param passwordText Das Passwort des Nutzers.
      *
-     * @return Wenn die Methode frühzeitig abgebrochen wurde {@code false} und bei vollständiger Ausführung {@code true}.
+     * @return Wenn die Methode frühzeitig abgebrochen wurde {@code false} und bei vollständiger Ausführung
+     *     {@code true}.
      */
     private boolean noInternetConnection(@NotNull final String username, @NotNull final String passwordText) {
         if (!UserHandler.exists(username)) {
             new LoginGui(true).open();
 
             JOptionPane.showMessageDialog(
-                    null,
-                    "Es konnte keine Verbindung hergestellt werden.",
-                    "Login fehlgeschlagen",
-                    JOptionPane.ERROR_MESSAGE
+                null,
+                "Es konnte keine Verbindung hergestellt werden.",
+                "Login fehlgeschlagen",
+                JOptionPane.ERROR_MESSAGE
             );
             return false;
         }
@@ -189,11 +191,11 @@ public final class LoginGui extends Gui implements KeyListener {
         }
 
         JOptionPane.showMessageDialog(
-                null,
-                "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
-                        "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
-                "Keine Verbindung zum Server",
-                JOptionPane.ERROR_MESSAGE
+            null,
+            "<html>Es konnte keine Verbindung hergestellt werden. <br>" +
+                "Es wird eine bereits heruntergeladene Version des Stundenplans für den aktuellen Benutzer geladen.",
+            "Keine Verbindung zum Server",
+            JOptionPane.ERROR_MESSAGE
         );
 
         return true;

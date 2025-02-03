@@ -6,6 +6,7 @@ import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.Locale;
 
@@ -55,9 +56,9 @@ public final class LvsGui extends Gui {
      * @param lvs Die jeweilige Lehrveranstaltung, auf dessen Grundlage dieses Fenster erzeugt werden soll.
      */
     public LvsGui(
-            @NotNull final TimetableGui timetableGui,
-            @NotNull final LVS lvs,
-            @NotNull final String username
+        @NotNull final TimetableGui timetableGui,
+        @NotNull final LVS lvs,
+        @NotNull final String username
     ) {
         super("", WIDTH, HEIGHT);
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -103,7 +104,8 @@ public final class LvsGui extends Gui {
 
 
     /**
-     * Öffnet einen {@link ColorPicker} für diese Lehrveranstaltung, mit dem sich die Hintergrundfarbe individualisieren lässt.
+     * Öffnet einen {@link ColorPicker} für diese Lehrveranstaltung, mit dem sich die Hintergrundfarbe individualisieren
+     * lässt.
      *
      * @param colorButton Der Button, von dem aus dieser Color-Picker geöffnet wurde. Dieser Button wird nach Auswahl
      *                    der Farbe in derselben eingefärbt.

@@ -81,7 +81,7 @@ public final class ICalHandler {
             );
 
             final URL timetableUrlLecturer = new URL(
-                    "https://mvc.antrago.hspv.nrw.de/docentIcsDownloadLink"
+                "https://mvc.antrago.hspv.nrw.de/docentIcsDownloadLink"
             );
 
             if (!isConnectionPresent()) {
@@ -122,7 +122,7 @@ public final class ICalHandler {
                     final HtmlPage antragoPage = lvsAnchor.click();
 
                     final WebResponse response = webClient.getPage(
-                            antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
+                        antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
                     ).getWebResponse();
                     response.defaultCharsetUtf8();
                     System.out.println("get response from antrago calender");

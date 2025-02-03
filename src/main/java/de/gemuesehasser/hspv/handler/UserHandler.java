@@ -39,8 +39,11 @@ public final class UserHandler {
     /**
      * Prüft, ob ein Stundenplan für einen bestimmten Benutzer bereits lokal existiert.
      *
-     * @param username Der Benutzername, für den überprüft werden soll, ob bereits einen lokal abgespeicherter Stundenplan existiert.
-     * @return Wenn ein Stundenplan für einen bestimmten Benutzer bereits lokal existiert {@code true}, ansonsten {@code false}.
+     * @param username Der Benutzername, für den überprüft werden soll, ob bereits einen lokal abgespeicherter
+     *                 Stundenplan existiert.
+     *
+     * @return Wenn ein Stundenplan für einen bestimmten Benutzer bereits lokal existiert {@code true}, ansonsten
+     *     {@code false}.
      */
     public static boolean exists(@NotNull final String username) {
         return Files.exists(Path.of(Timetable.CACHE_FOLDER + File.separator + "stundenplan_" + username + ".ics"));
@@ -50,6 +53,7 @@ public final class UserHandler {
      * Gibt die Datei des Stundenplans eines bestimmten Benutzers zurück.
      *
      * @param username Der Benutzername des Nutzers, dessen Stundenplan zurückgegeben werden soll.
+     *
      * @return Die Datei des Stundenplans eines bestimmten Benutzers.
      */
     public static File getTimetable(@NotNull final String username) {
@@ -59,14 +63,16 @@ public final class UserHandler {
     /**
      * Speichert eine gewisse Individualisierung eines Benutzers in der Konfigurationsdatei ab.
      *
-     * @param username      Der Benutzername des Nutzers, für den eine gewisse Individualisierung abgespeichert werden soll.
-     * @param path          Der Pfad, unter dem diese Individualisierung abgespeichert werden soll in der Konfigurationsdatei.
+     * @param username      Der Benutzername des Nutzers, für den eine gewisse Individualisierung abgespeichert werden
+     *                      soll.
+     * @param path          Der Pfad, unter dem diese Individualisierung abgespeichert werden soll in der
+     *                      Konfigurationsdatei.
      * @param configuration Die Konfiguration in Form eines Textes, die abgespeichert werden soll.
      */
     public static void saveConfiguration(
-            @NotNull final String username,
-            @NotNull final String path,
-            @NotNull final String configuration
+        @NotNull final String username,
+        @NotNull final String path,
+        @NotNull final String configuration
     ) {
         final Properties configurations = new Properties();
         final String configPath = Timetable.CACHE_FOLDER + File.separator + "config.properties";
@@ -87,13 +93,13 @@ public final class UserHandler {
      * @param username Der Benutzername des Nutzers, für den die Individualisierung zurückgegeben werden soll.
      * @param path     Der Pfad unter dem diese Individualisierung in der Konfigurationsdatei zu finden ist.
      *
-     * @return eine gewisse Individualisierung für einen bestimmten Nutzer aus der Konfigurationsdatei zurück. Falls diese
-     * Individualisierung nicht vorhanden ist, {@code null}.
+     * @return eine gewisse Individualisierung für einen bestimmten Nutzer aus der Konfigurationsdatei zurück. Falls
+     *     diese Individualisierung nicht vorhanden ist, {@code null}.
      */
     @Nullable
     public static String getConfiguration(
-            @NotNull final String username,
-            @NotNull final String path
+        @NotNull final String username,
+        @NotNull final String path
     ) {
         final Properties configurations = new Properties();
         final String configPath = Timetable.CACHE_FOLDER + File.separator + "config.properties";

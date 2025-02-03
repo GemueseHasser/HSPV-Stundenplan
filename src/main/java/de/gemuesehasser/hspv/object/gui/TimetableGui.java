@@ -89,11 +89,11 @@ public final class TimetableGui extends Gui implements KeyListener {
 
 
     /**
-     * Wechselt die aktuelle Woche in diesem {@link TimetableGui}, die angezeigt wird. Dabei werden die LVS der Woche neu
-     * geladen und das Fenster wird komplett neu gezeichnet.
+     * Wechselt die aktuelle Woche in diesem {@link TimetableGui}, die angezeigt wird. Dabei werden die LVS der Woche
+     * neu geladen und das Fenster wird komplett neu gezeichnet.
      *
-     * @param weekAddition Die Anzahl an Wochen, um die die aktuelle Woche geändert werden soll. Dabei funktionieren positive
-     *                     und auch negative ganze Zahlen.
+     * @param weekAddition Die Anzahl an Wochen, um die die aktuelle Woche geändert werden soll. Dabei funktionieren
+     *                     positive und auch negative ganze Zahlen.
      */
     public void loadWeek(final int weekAddition) {
         currentWeek += weekAddition;
@@ -192,8 +192,8 @@ public final class TimetableGui extends Gui implements KeyListener {
      *
      * @param text Der Text, der auf diesem Button angezeigt werden soll.
      *
-     * @return Ein neuer {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise formatiert ist,
-     * sodass dieser visuell zum {@link TimetableGui} passt.
+     * @return Ein neuer {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise
+     *     formatiert ist, sodass dieser visuell zum {@link TimetableGui} passt.
      */
     private JButton getWeekSwitchButton(final String text) {
         final JButton button = new JButton(text);
@@ -248,7 +248,11 @@ public final class TimetableGui extends Gui implements KeyListener {
 
             g.setColor(Color.WHITE);
             g.drawString((8 + hourPlus) + ":" + (minutePlus == 0 ? "00" : minutePlus), 3, 45 + i * 55 + breakAddition);
-            g.drawString((8 + hourPlusPlus) + ":" + (minutePlusPlus == 0 ? "00" : minutePlusPlus), 3, 80 + i * 55 + breakAddition);
+            g.drawString(
+                (8 + hourPlusPlus) + ":" + (minutePlusPlus == 0 ? "00" : minutePlusPlus),
+                3,
+                80 + i * 55 + breakAddition
+            );
         }
     }
 
