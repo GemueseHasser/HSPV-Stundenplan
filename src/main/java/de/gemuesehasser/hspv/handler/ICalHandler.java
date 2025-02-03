@@ -1,17 +1,17 @@
 package de.gemuesehasser.hspv.handler;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import de.gemuesehasser.hspv.object.LVS;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.CalendarComponent;
+import org.htmlunit.ElementNotFoundException;
+import org.htmlunit.WebClient;
+import org.htmlunit.WebResponse;
+import org.htmlunit.html.HtmlAnchor;
+import org.htmlunit.html.HtmlForm;
+import org.htmlunit.html.HtmlPage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileInputStream;
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
@@ -124,7 +125,7 @@ public final class ICalHandler {
                     final WebResponse response = webClient.getPage(
                         antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
                     ).getWebResponse();
-                    response.defaultCharsetUtf8();
+                    response.getWebRequest().setDefaultResponseContentCharset(StandardCharsets.UTF_8);
                     System.out.println("get response from antrago calender");
 
                     UserHandler.saveTimetable(username, response.getContentAsString());

@@ -27,7 +27,7 @@
         </repository>
         <repository>
             <id>HTML-Unit</id>
-            <url>https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit</url>
+            <url>https://mvnrepository.com/artifact/org.htmlunit/htmlunit</url>
         </repository>
         <repository>
             <id>Lombok</id>
@@ -52,9 +52,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
+            <groupId>org.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
-            <version>2.70.0</version>
+            <version>4.9.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
