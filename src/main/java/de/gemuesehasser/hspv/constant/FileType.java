@@ -3,6 +3,7 @@ package de.gemuesehasser.hspv.constant;
 import de.gemuesehasser.hspv.Timetable;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -38,7 +39,7 @@ public enum FileType {
      * @param fileName Der Name der Datei, die mithilfe dieses Typen generiert wird.
      */
     @SneakyThrows
-    FileType(String fileName) {
+    FileType(@NotNull final String fileName) {
         this.file = new File(Timetable.CACHE_FOLDER + File.separator + fileName);
 
         if (!file.createNewFile()) return;
