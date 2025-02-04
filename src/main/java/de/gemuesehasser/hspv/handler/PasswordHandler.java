@@ -1,13 +1,12 @@
 package de.gemuesehasser.hspv.handler;
 
-import de.gemuesehasser.hspv.Timetable;
+import de.gemuesehasser.hspv.constant.FileType;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.SecureRandom;
@@ -25,8 +24,6 @@ import java.util.Properties;
 public final class PasswordHandler {
 
     //<editor-fold desc="CONSTANTS">
-    /** Die Datei, in welcher die Daten gespeichert werden. */
-    private static final File DATA_FILE = new File(Timetable.CACHE_FOLDER + File.separator + "data.properties");
     /** Der Algorithmus, mit dem der hash für das jeweilige Passwort erzeugt wird. */
     private static final String HASH_ALGORITHM = "PBKDF2WithHmacSHA1";
     /** Die Anzahl an Iterationen, die der Algorithmus läuft, bis der Hash vollständig erzeugt wird. */
@@ -53,7 +50,7 @@ public final class PasswordHandler {
     @SneakyThrows
     public static boolean validatePassword(@NotNull final String username, @NotNull final String password) {
         final Properties data = new Properties();
-        data.load(new FileInputStream(DATA_FILE));
+        data.load(new FileInputStream(FileType.DATA_FILE.getFile()));
 
         if (!data.containsKey(username)) return false;
 
@@ -77,10 +74,10 @@ public final class PasswordHandler {
     @SneakyThrows
     public static void saveHashedPassword(@NotNull final String username, @NotNull final String password) {
         final Properties data = new Properties();
-        data.load(new FileInputStream(DATA_FILE));
+        data.load(new FileInputStream(FileType.DATA_FILE.getFile()));
 
         data.setProperty(username, getHashedPassword(password, getNewSalt()));
-        data.store(new FileOutputStream(DATA_FILE), null);
+        data.store(new FileOutputStream(FileType.DATA_FILE.getFile()), null);
     }
 
     /**
