@@ -159,9 +159,9 @@ public final class ICalHandler {
         final LinkedHashMap<LocalDateTime, LVS> lvsMap = new LinkedHashMap<>();
 
         for (@NotNull final CalendarComponent component : calendar.getComponents()) {
-            final Optional<Property> startProperty = component.getProperty("DTSTART");
-            final Optional<Property> endProperty = component.getProperty("DTEND");
-            final Optional<Property> descriptionProperty = component.getProperty("DESCRIPTION");
+            final Optional<Property> startProperty = Optional.ofNullable(component.getProperty("DTSTART"));
+            final Optional<Property> endProperty = Optional.ofNullable(component.getProperty("DTEND"));
+            final Optional<Property> descriptionProperty = Optional.ofNullable(component.getProperty("DESCRIPTION"));
 
             if (startProperty.isEmpty() || endProperty.isEmpty() || descriptionProperty.isEmpty()) continue;
 

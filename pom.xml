@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.mnode.ical4j</groupId>
             <artifactId>ical4j</artifactId>
-            <version>4.0.8</version>
+            <version>3.2.19</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
