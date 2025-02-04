@@ -163,7 +163,7 @@ public final class ICalHandler {
             final Optional<Property> endProperty = Optional.ofNullable(component.getProperty("DTEND"));
             final Optional<Property> descriptionProperty = Optional.ofNullable(component.getProperty("DESCRIPTION"));
 
-            if (startProperty.isEmpty() || endProperty.isEmpty() || descriptionProperty.isEmpty()) continue;
+            if (!startProperty.isPresent() || !endProperty.isPresent() || !descriptionProperty.isPresent()) continue;
 
             final LocalDateTime startDate = getDateFromString(startProperty.get().getValue());
             final LocalDateTime endDate = getDateFromString(endProperty.get().getValue());

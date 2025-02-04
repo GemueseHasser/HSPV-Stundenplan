@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 
@@ -39,7 +38,7 @@ public class Timetable {
      * @param args Die Argumente, die von der JRE beim Ausführen dieser Main-Methode übergeben werden.
      */
     public static void main(@NotNull final String @NotNull [] args) throws IOException {
-        Files.createDirectories(Path.of(CACHE_FOLDER));
+        Files.createDirectories(new File(CACHE_FOLDER).toPath());
 
         final LoginGui loginGui = new LoginGui(false);
         loginGui.open();

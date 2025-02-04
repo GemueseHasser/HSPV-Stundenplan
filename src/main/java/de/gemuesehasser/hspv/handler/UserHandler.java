@@ -7,12 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Properties;
 
 /**
@@ -47,7 +44,7 @@ public final class UserHandler {
      *     {@code false}.
      */
     public static boolean exists(@NotNull final String username) {
-        return Files.exists(Path.of(Timetable.CACHE_FOLDER + File.separator + "stundenplan_" + username + ".ics"));
+        return Files.exists(new File(Timetable.CACHE_FOLDER + File.separator + "stundenplan_" + username + ".ics").toPath());
     }
 
     /**
@@ -78,9 +75,9 @@ public final class UserHandler {
         final Properties configurations = new Properties();
 
         try {
-            configurations.load(new FileInputStream(FileType.CONFIG_FILE.getFile()));
+            configurations.load(Files.newInputStream(FileType.CONFIG_FILE.getFile().toPath()));
             configurations.setProperty(username + "." + path, configuration);
-            configurations.store(new FileOutputStream(FileType.CONFIG_FILE.getFile()), null);
+            configurations.store(Files.newOutputStream(FileType.CONFIG_FILE.getFile().toPath()), null);
         } catch (@NotNull final IOException e) {
             throw new RuntimeException(e);
         }
@@ -104,7 +101,7 @@ public final class UserHandler {
         final Properties configurations = new Properties();
 
         try {
-            configurations.load(new FileInputStream(FileType.CONFIG_FILE.getFile()));
+            configurations.load(Files.newInputStream(FileType.CONFIG_FILE.getFile().toPath()));
             return configurations.getProperty(username + "." + path);
         } catch (@NotNull final IOException e) {
             return null;

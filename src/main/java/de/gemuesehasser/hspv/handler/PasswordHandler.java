@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.Base64;
@@ -50,7 +49,7 @@ public final class PasswordHandler {
     @SneakyThrows
     public static boolean validatePassword(@NotNull final String username, @NotNull final String password) {
         final Properties data = new Properties();
-        data.load(new FileInputStream(FileType.DATA_FILE.getFile()));
+        data.load(Files.newInputStream(FileType.DATA_FILE.getFile().toPath()));
 
         if (!data.containsKey(username)) return false;
 
@@ -74,10 +73,10 @@ public final class PasswordHandler {
     @SneakyThrows
     public static void saveHashedPassword(@NotNull final String username, @NotNull final String password) {
         final Properties data = new Properties();
-        data.load(new FileInputStream(FileType.DATA_FILE.getFile()));
+        data.load(Files.newInputStream(FileType.DATA_FILE.getFile().toPath()));
 
         data.setProperty(username, getHashedPassword(password, getNewSalt()));
-        data.store(new FileOutputStream(FileType.DATA_FILE.getFile()), null);
+        data.store(Files.newOutputStream(FileType.DATA_FILE.getFile().toPath()), null);
     }
 
     /**
