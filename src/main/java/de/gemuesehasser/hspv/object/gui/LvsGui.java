@@ -5,9 +5,11 @@ import de.gemuesehasser.hspv.handler.UserHandler;
 import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Locale;
 
 /**

@@ -4,9 +4,12 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 /**
  * Ein {@link Gui} stellt die Super-Instanz eines Fensters dar, also die Grundlage, welche genutzt werden kann, um
