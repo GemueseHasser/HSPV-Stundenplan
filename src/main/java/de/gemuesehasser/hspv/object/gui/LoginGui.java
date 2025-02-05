@@ -1,6 +1,7 @@
 package de.gemuesehasser.hspv.object.gui;
 
 import de.gemuesehasser.hspv.Timetable;
+import de.gemuesehasser.hspv.constant.PropertyType;
 import de.gemuesehasser.hspv.handler.ICalHandler;
 import de.gemuesehasser.hspv.handler.PasswordHandler;
 import de.gemuesehasser.hspv.handler.UserHandler;
@@ -40,6 +41,8 @@ public final class LoginGui extends Gui implements KeyListener {
     private static final int LOGO_WIDTH = 300;
     /** Die Höhe des HSPV-Logos. */
     private static final int LOGO_HEIGHT = 200;
+    /** Der Name der Eigenschaft, unter der der letzte Benutzername abgespeichert wird, der sich eingeloggt hat. */
+    private static final String LAST_LOGIN_PROPERTY = "lastLoginName";
     //</editor-fold>
 
 
@@ -81,6 +84,8 @@ public final class LoginGui extends Gui implements KeyListener {
 
         usernameField.setBounds(WIDTH / 2 - TEXT_FIELD_WIDTH / 2, 200, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
         usernameField.addKeyListener(this);
+        usernameField.setText(PropertyType.DATA_FILE.getProperties().getProperty(LAST_LOGIN_PROPERTY));
+        usernameField.selectAll();
 
         passwordField.setBounds(WIDTH / 2 - TEXT_FIELD_WIDTH / 2, 300, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
         passwordField.addKeyListener(this);
@@ -109,6 +114,10 @@ public final class LoginGui extends Gui implements KeyListener {
     private void login() {
         loadingGui.open();
         super.dispose();
+
+        final PropertyType dataType = PropertyType.DATA_FILE;
+        dataType.getProperties().setProperty(LAST_LOGIN_PROPERTY, usernameField.getText());
+        dataType.saveProperties();
 
         Executors.newScheduledThreadPool(1).schedule(this::loginAttemp, 100, TimeUnit.MILLISECONDS);
     }
