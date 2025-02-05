@@ -1,13 +1,12 @@
 package de.gemuesehasser.hspv.handler;
 
-import de.gemuesehasser.hspv.constant.FileType;
+import de.gemuesehasser.hspv.constant.PropertyType;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.Base64;
@@ -48,9 +47,7 @@ public final class PasswordHandler {
      */
     @SneakyThrows
     public static boolean validatePassword(@NotNull final String username, @NotNull final String password) {
-        final Properties data = new Properties();
-        data.load(Files.newInputStream(FileType.DATA_FILE.getFile().toPath()));
-
+        final Properties data = PropertyType.DATA_FILE.getProperties();
         if (!data.containsKey(username)) return false;
 
         final String[] userData = data.getProperty(username).split(":");
@@ -72,11 +69,9 @@ public final class PasswordHandler {
      */
     @SneakyThrows
     public static void saveHashedPassword(@NotNull final String username, @NotNull final String password) {
-        final Properties data = new Properties();
-        data.load(Files.newInputStream(FileType.DATA_FILE.getFile().toPath()));
-
+        final Properties data = PropertyType.DATA_FILE.getProperties();
         data.setProperty(username, getHashedPassword(password, getNewSalt()));
-        data.store(Files.newOutputStream(FileType.DATA_FILE.getFile().toPath()), null);
+        PropertyType.DATA_FILE.saveProperties();
     }
 
     /**

@@ -1,7 +1,7 @@
 package de.gemuesehasser.hspv.handler;
 
 import de.gemuesehasser.hspv.Timetable;
-import de.gemuesehasser.hspv.constant.FileType;
+import de.gemuesehasser.hspv.constant.PropertyType;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,15 +72,9 @@ public final class UserHandler {
         @NotNull final String path,
         @NotNull final String configuration
     ) {
-        final Properties configurations = new Properties();
-
-        try {
-            configurations.load(Files.newInputStream(FileType.CONFIG_FILE.getFile().toPath()));
-            configurations.setProperty(username + "." + path, configuration);
-            configurations.store(Files.newOutputStream(FileType.CONFIG_FILE.getFile().toPath()), null);
-        } catch (@NotNull final IOException e) {
-            throw new RuntimeException(e);
-        }
+        final Properties configurations = PropertyType.CONFIG_FILE.getProperties();
+        configurations.setProperty(username + "." + path, configuration);
+        PropertyType.CONFIG_FILE.saveProperties();
     }
 
     /**
@@ -98,14 +92,8 @@ public final class UserHandler {
         @NotNull final String username,
         @NotNull final String path
     ) {
-        final Properties configurations = new Properties();
-
-        try {
-            configurations.load(Files.newInputStream(FileType.CONFIG_FILE.getFile().toPath()));
-            return configurations.getProperty(username + "." + path);
-        } catch (@NotNull final IOException e) {
-            return null;
-        }
+        final Properties configurations = PropertyType.CONFIG_FILE.getProperties();
+        return configurations.getProperty(username + "." + path);
     }
     //</editor-fold>
 
