@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -18,6 +19,7 @@ import java.awt.event.KeyListener;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -209,6 +211,7 @@ public final class TimetableGui extends Gui implements KeyListener {
 
     //<editor-fold desc="implementation">
 
+    /* This drawing method includes everything under the buttons. */
     @Override
     public void draw(@NotNull Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
@@ -220,6 +223,7 @@ public final class TimetableGui extends Gui implements KeyListener {
         g.setColor(Color.WHITE);
         g.drawString(weekStartDate.getMonth().getDisplayName(TextStyle.SHORT_STANDALONE, Locale.GERMANY), 5, 20);
 
+        // draw vertical components
         for (int i = 0; i < 5; i++) {
             g.setColor(Color.BLACK);
             g.drawRect(50 + i * 90, 0, 90, HEIGHT);
@@ -233,6 +237,7 @@ public final class TimetableGui extends Gui implements KeyListener {
             );
         }
 
+        // draw horizontal components
         g.setColor(Color.BLACK);
         g.drawRect(0, 0, WIDTH, 30);
         for (int i = 0; i < HEIGHT / 55; i++) {
@@ -257,6 +262,29 @@ public final class TimetableGui extends Gui implements KeyListener {
                 80 + i * 55 + breakAddition
             );
         }
+    }
+
+    /* This drawing method includes everything over the buttons -> needs more resources. */
+    @Override
+    public void paint(@NotNull final Graphics graphics) {
+        super.paint(graphics);
+
+        final Graphics2D g = (Graphics2D) graphics;
+
+        // get current local time
+        final LocalDateTime currentTime = LocalDateTime.now();
+
+        // display current local time as red line
+        final int currentTimeMinuteAddition = (currentTime.getHour() - 8) * 60 + currentTime.getMinute();
+        final int lvsAmount = (currentTimeMinuteAddition - ((currentTimeMinuteAddition / 90) * 15)) / 45;
+        final int breakAddition = (lvsAmount / 2) * 15 + (lvsAmount / 6 == 1 ? 15 : 0);
+
+        final int currentTimeY = (lvsAmount * 55) + breakAddition + (currentTimeMinuteAddition - (lvsAmount * 45 + breakAddition));
+
+        g.setColor(Color.RED);
+        g.drawLine(0, 60 + currentTimeY, WIDTH, 60 + currentTimeY);
+
+        repaint();
     }
 
     @Override
