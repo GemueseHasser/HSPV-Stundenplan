@@ -283,8 +283,7 @@ public final class TimetableGui extends Gui implements KeyListener {
         final int currentTimeY = (lvsAmount * 55) + breakAddition + (currentTimeMinuteAddition - (lvsAmount * 45 + breakAddition));
 
         g.setColor(Color.RED);
-        g.setStroke(new BasicStroke(3));
-        g.drawLine(0, 59 + currentTimeY, WIDTH, 59 + currentTimeY);
+        g.fillRect(40, 59 + currentTimeY, WIDTH, 3);
 
         repaint();
     }
