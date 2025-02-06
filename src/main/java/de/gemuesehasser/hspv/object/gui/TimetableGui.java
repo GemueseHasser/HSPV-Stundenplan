@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -282,7 +283,8 @@ public final class TimetableGui extends Gui implements KeyListener {
         final int currentTimeY = (lvsAmount * 55) + breakAddition + (currentTimeMinuteAddition - (lvsAmount * 45 + breakAddition));
 
         g.setColor(Color.RED);
-        g.drawLine(0, 60 + currentTimeY, WIDTH, 60 + currentTimeY);
+        g.setStroke(new BasicStroke(3));
+        g.drawLine(0, 59 + currentTimeY, WIDTH, 59 + currentTimeY);
 
         repaint();
     }
