@@ -135,7 +135,7 @@ public final class LoginGui extends Gui implements KeyListener {
             passwordBuilder.append(pwChar);
         }
 
-        final String username = usernameField.getText();
+        final String username = usernameField.getText().replaceAll("\\s", "");
         final String passwordText = passwordBuilder.toString();
 
         final ICalHandler iCalHandler = new ICalHandler(username, passwordText);

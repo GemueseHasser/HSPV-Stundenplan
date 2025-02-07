@@ -225,6 +225,11 @@ public final class TimetableGui extends Gui implements KeyListener {
 
         // draw vertical components
         for (int i = 0; i < 5; i++) {
+            if (LocalDate.now().isEqual(weekStartDate.plusDays(i))) {
+                g.setColor(Color.GRAY);
+                g.fillRect(50 + i * 90, 30, 90, HEIGHT);
+            }
+
             g.setColor(Color.BLACK);
             g.drawRect(50 + i * 90, 0, 90, HEIGHT);
 
