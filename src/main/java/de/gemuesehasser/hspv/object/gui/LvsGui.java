@@ -120,7 +120,7 @@ public final class LvsGui extends Gui {
         frame.setLocationRelativeTo(null);
 
         final ColorPicker colorPicker = new ColorPicker(true, true, Locale.GERMAN);
-        colorPicker.setColor(LVS.DEFAULT_COLOR);
+        colorPicker.setColor(lvs.getColor());
         colorPicker.addColorListener(colorModel -> {
             final Color color = colorModel.getColor();
 

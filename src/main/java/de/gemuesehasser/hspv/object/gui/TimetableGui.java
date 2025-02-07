@@ -167,11 +167,21 @@ public final class TimetableGui extends Gui implements KeyListener {
                 break;
             }
 
+            // check if color configuration already exists
+            if (UserHandler.getConfiguration(username, "color." + description) == null) {
+                UserHandler.saveConfiguration(
+                    username,
+                    "color." + description,
+                    String.valueOf(lvs.getColor().getRGB())
+                );
+            }
+
+            // get color rgb
             final String colorRgb = UserHandler.getConfiguration(username, "color." + description);
 
-            if (colorRgb != null) {
-                lvs.setColor(new Color(Integer.parseInt(colorRgb)));
-            }
+            // set lvs color
+            assert colorRgb != null;
+            lvs.setColor(new Color(Integer.parseInt(colorRgb)));
 
             final LvsButton button = new LvsButton(
                 "<html><a style='margin: 20px'>" + description + "<br><br>" + (Objects.equals(
