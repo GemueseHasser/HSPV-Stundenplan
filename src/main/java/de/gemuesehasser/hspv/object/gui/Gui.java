@@ -20,6 +20,7 @@ public abstract class Gui extends JFrame {
 
     //<editor-fold desc="LOCAL FIELDS">
     /** Das Zeichenobjekt, welches genutzt wird, um Grafiken auf dieses Fenster zu zeichnen. */
+    @NotNull
     private final Draw draw = new Draw();
     //</editor-fold>
 

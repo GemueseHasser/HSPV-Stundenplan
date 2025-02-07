@@ -19,6 +19,7 @@ public class Timetable {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Cache-Ordner dieser Anwendung, in welcher die Benutzer-Dateien gespeichert werden. */
+    @NotNull
     public static final String CACHE_FOLDER = System.getProperty("user.home") + File.separator + ".stundenplan_cache";
     //</editor-fold>
 

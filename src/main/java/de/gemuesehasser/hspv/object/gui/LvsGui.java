@@ -32,18 +32,25 @@ public final class LvsGui extends Gui {
 
     //<editor-fold desc="LOCAL FIELDS">
     /** Das jeweilige {@link TimetableGui} von dem aus dieses Lvs-Gui geöffnet wurde. */
+    @NotNull
     private final TimetableGui timetableGui;
     /** Die jeweilige Lehrveranstaltung, auf dessen Grundlage dieses Fenster erzeugt werden soll. */
+    @NotNull
     private final LVS lvs;
     /** Der Benutzername des aktuell angemeldeten Nutzers, für den der Stundenplan geladen wurde. */
+    @NotNull
     private final String username;
     /** Der Name des jeweiligen Dozenten. */
+    @NotNull
     private final String docentName;
     /** Der jeweilige Raum. */
+    @NotNull
     private final String room;
     /** Der jeweilige Name der Lehrveranstaltung. */
+    @NotNull
     private String lvsName = "name";
     /** Die jeweilige Modulbezeichnung der Lehrveranstaltung. */
+    @NotNull
     private String module = "module";
     //</editor-fold>
 
@@ -144,7 +151,7 @@ public final class LvsGui extends Gui {
     //<editor-fold desc="implementation">
 
     @Override
-    public void draw(@NotNull Graphics2D g) {
+    public void draw(@NotNull final Graphics2D g) {
         g.drawString("LVS: " + lvsName, 20, 20);
         g.drawString("Modul: " + module, 20, 40);
         g.drawString("Raum: " + room, 20, 60);

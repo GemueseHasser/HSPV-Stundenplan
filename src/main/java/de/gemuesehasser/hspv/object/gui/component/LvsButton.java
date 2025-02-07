@@ -1,6 +1,7 @@
 package de.gemuesehasser.hspv.object.gui.component;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import javax.swing.JButton;
 
@@ -34,7 +35,10 @@ public final class LvsButton extends JButton {
      * @param text     Der Text, der auf diesem Button angezeigt werden soll.
      * @param rounding Die Größe der abgerundeten Ecken dieses Buttons.
      */
-    public LvsButton(final String text, final int rounding) {
+    public LvsButton(
+        @NotNull final String text,
+        @Range(from = 0, to = Integer.MAX_VALUE) final int rounding
+    ) {
         super(text);
         this.rounding = rounding;
 
@@ -69,7 +73,10 @@ public final class LvsButton extends JButton {
     }
 
     @Override
-    public boolean contains(final int x, final int y) {
+    public boolean contains(
+        @Range(from = 0, to = Integer.MAX_VALUE) final int x,
+        @Range(from = 0, to = Integer.MAX_VALUE) final int y
+    ) {
         if (shape == null || !shape.getBounds().equals(getBounds())) {
             this.shape = new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), rounding, rounding);
         }

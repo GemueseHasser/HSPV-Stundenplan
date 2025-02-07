@@ -26,7 +26,10 @@ public final class UserHandler {
      * @param username Der Benutzername des Nutzers, dessen Stundenplan abgespeichert werden soll.
      * @param content  Der Inhalt des Stundenplans in ICS-Syntax.
      */
-    public static void saveTimetable(@NotNull final String username, @NotNull final String content) throws IOException {
+    public static void saveTimetable(
+        @NotNull final String username,
+        @NotNull final String content
+    ) throws IOException {
         final File file = new File(Timetable.CACHE_FOLDER + File.separator + "stundenplan_" + username + ".ics");
         if (file.delete()) {
             file.createNewFile();
@@ -54,6 +57,7 @@ public final class UserHandler {
      *
      * @return Die Datei des Stundenplans eines bestimmten Benutzers.
      */
+    @NotNull
     public static File getTimetable(@NotNull final String username) {
         return new File(Timetable.CACHE_FOLDER + File.separator + "stundenplan_" + username + ".ics");
     }

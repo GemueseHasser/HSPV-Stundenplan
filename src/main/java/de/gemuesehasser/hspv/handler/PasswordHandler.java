@@ -23,6 +23,7 @@ public final class PasswordHandler {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Algorithmus, mit dem der hash für das jeweilige Passwort erzeugt wird. */
+    @NotNull
     private static final String HASH_ALGORITHM = "PBKDF2WithHmacSHA1";
     /** Die Anzahl an Iterationen, die der Algorithmus läuft, bis der Hash vollständig erzeugt wird. */
     private static final int HASH_ITERATIONS = 65536;
@@ -46,7 +47,10 @@ public final class PasswordHandler {
      *     ansonsten {@code false} (auch wenn noch kein Passwort für den Benutzer gespeichert wurde).
      */
     @SneakyThrows
-    public static boolean validatePassword(@NotNull final String username, @NotNull final String password) {
+    public static boolean validatePassword(
+        @NotNull final String username,
+        @NotNull final String password
+    ) {
         final Properties data = PropertyType.DATA_FILE.getProperties();
         if (!data.containsKey(username)) return false;
 
@@ -68,7 +72,10 @@ public final class PasswordHandler {
      * @param password Das Passwort, welches in Form eines Hash abgespeichert werden soll.
      */
     @SneakyThrows
-    public static void saveHashedPassword(@NotNull final String username, @NotNull final String password) {
+    public static void saveHashedPassword(
+        @NotNull final String username,
+        @NotNull final String password
+    ) {
         final Properties data = PropertyType.DATA_FILE.getProperties();
         data.setProperty(username, getHashedPassword(password, getNewSalt()));
         PropertyType.DATA_FILE.saveProperties();
@@ -85,7 +92,10 @@ public final class PasswordHandler {
      *     genutzt wird, um den Hash zu erzeugen und der zweite Teil des Textes besteht aus dem erzeugten Hash.
      */
     @SneakyThrows
-    private static String getHashedPassword(@NotNull final String password, final byte @NotNull [] salt) {
+    private static String getHashedPassword(
+        @NotNull final String password,
+        final byte @NotNull [] salt
+    ) {
         final KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, HASH_ITERATIONS, KEY_LENGTH);
         final SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(HASH_ALGORITHM);
 

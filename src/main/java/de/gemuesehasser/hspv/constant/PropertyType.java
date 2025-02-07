@@ -27,8 +27,10 @@ public enum PropertyType {
     //<editor-fold desc="LOCAL FIELDS">
     /** Die {@link Properties}, die auf Grundlage dieses Typen erzeugt werden im Cache-Ordner dieser Anwendung. */
     @Getter
+    @NotNull
     private final Properties properties = new Properties();
     /** Die Datei, welche mithilfe dieses Typen generiert wird. */
+    @NotNull
     private final File file;
     //</editor-fold>
 

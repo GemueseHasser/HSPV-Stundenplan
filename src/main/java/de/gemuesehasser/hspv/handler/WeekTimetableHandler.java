@@ -27,6 +27,7 @@ public final class WeekTimetableHandler {
      *
      * @return Die gefilterten Lehrveranstaltungen einer bestimmten Woche aus allen Lehrveranstaltungen.
      */
+    @NotNull
     public static LinkedList<LVS> getWeekLvs(@Range(from = 0, to = Integer.MAX_VALUE) final int weekAddition) {
         final LinkedList<LVS> lvsList = new LinkedList<>();
 

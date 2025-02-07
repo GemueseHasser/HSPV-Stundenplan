@@ -1,6 +1,7 @@
 package de.gemuesehasser.hspv.object.gui;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import javax.imageio.ImageIO;
 
@@ -28,10 +29,12 @@ public final class LoadingGui extends Gui implements Runnable {
 
     //<editor-fold desc="LOCAL FIELDS">
     /** Der Scheduler, welcher dafür zuständig ist, den Ladebildschirm konstant zu aktualisieren. */
+    @NotNull
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     /** Die Grafik, welche die Grundlage für diese Lade-Animation darstellt. */
     private BufferedImage waitingImage;
     /** Die aktuelle Gradzahl, um die die Lade-Grafik gedreht ist. */
+    @Range(from = 0, to = 360)
     private double angle = 0;
     //</editor-fold>
 
@@ -64,7 +67,7 @@ public final class LoadingGui extends Gui implements Runnable {
      * @return Die um eine bestimmte Gradzahl gedrehte Lade-Grafik in Form eines formatierten Bildes.
      */
     @NotNull
-    private BufferedImage getRotatedImage(Double angle) {
+    private BufferedImage getRotatedImage(@Range(from = 0, to = 360) final Double angle) {
         final double sin = Math.abs(Math.sin(Math.toRadians(angle)));
         final double cos = Math.abs(Math.cos(Math.toRadians(angle)));
         final int w = waitingImage.getWidth();
@@ -84,7 +87,7 @@ public final class LoadingGui extends Gui implements Runnable {
     //<editor-fold desc="implementation">
 
     @Override
-    public void draw(@NotNull Graphics2D g) {
+    public void draw(@NotNull final Graphics2D g) {
         g.drawImage(getRotatedImage(angle), 0, 0, WIDTH, HEIGHT, null);
 
         repaint();

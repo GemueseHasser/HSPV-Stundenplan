@@ -43,8 +43,10 @@ public final class ICalHandler {
 
     //<editor-fold desc="LOCAL FIELDS">
     /** Der Benutzername des Nutzers auf der HSPV-Website. */
+    @NotNull
     private final String username;
     /** Das Passwort des Nutzers auf der HSPV-Website. */
+    @NotNull
     private final String password;
     /** Der Kalender, welche alle Einträge der ICS-Datei (Kalender-Datei) enthält. */
     private Calendar calendar;
@@ -210,7 +212,7 @@ public final class ICalHandler {
      *
      * @return Wenn dieser Host erreichbar ist, {@code true}, ansonsten {@code false}.
      */
-    private static boolean isHostReachable(final String host) {
+    private static boolean isHostReachable(@NotNull final String host) {
         try (final Socket socket = new Socket()) {
             final InetSocketAddress address = new InetSocketAddress(host, 80);
             socket.connect(address, 1000);

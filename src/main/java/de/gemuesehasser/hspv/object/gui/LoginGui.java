@@ -32,6 +32,7 @@ public final class LoginGui extends Gui implements KeyListener {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Titel dieses Fensters. */
+    @NotNull
     private static final String TITLE = "HSPV-Stundenplan";
     /** Die Breite dieses Fensters. */
     private static final int WIDTH = 300;
@@ -46,16 +47,20 @@ public final class LoginGui extends Gui implements KeyListener {
     /** Die Höhe des HSPV-Logos. */
     private static final int LOGO_HEIGHT = 200;
     /** Der Name der Eigenschaft, unter der der letzte Benutzername abgespeichert wird, der sich eingeloggt hat. */
+    @NotNull
     private static final String LAST_LOGIN_PROPERTY = "lastLoginName";
     //</editor-fold>
 
 
     //<editor-fold desc="LOCAL FIELDS">
     /** Das Textfeld, in welchem der Benutzername eingegeben werden soll. */
+    @NotNull
     private final JTextField usernameField = new JTextField();
     /** Das Textfeld, in welchem das Passwort eingegeben werden soll. */
+    @NotNull
     private final JPasswordField passwordField = new JPasswordField();
     /** Die {@link LoadingGui Lade-Animation}, die angezeigt wird, sobald die Benutzerdaten abgeschickt wurden. */
+    @NotNull
     private final LoadingGui loadingGui = new LoadingGui();
     /** Das HSPV-Logo, welches im Login-Bereich angezeigt wird. */
     private BufferedImage hspvLogo;
@@ -185,7 +190,10 @@ public final class LoginGui extends Gui implements KeyListener {
      * @return Wenn die Methode frühzeitig abgebrochen wurde {@code false} und bei vollständiger Ausführung
      *     {@code true}.
      */
-    private boolean noInternetConnection(@NotNull final String username, @NotNull final String passwordText) {
+    private boolean noInternetConnection(
+        @NotNull final String username,
+        @NotNull final String passwordText
+    ) {
         if (!UserHandler.exists(username)) {
             new LoginGui(true).open();
 
@@ -217,7 +225,7 @@ public final class LoginGui extends Gui implements KeyListener {
     //<editor-fold desc="implementation">
 
     @Override
-    public void draw(@NotNull Graphics2D g) {
+    public void draw(@NotNull final Graphics2D g) {
         g.drawImage(hspvLogo, -10, 0, LOGO_WIDTH, LOGO_HEIGHT, null);
 
         g.drawString("Benutzername", WIDTH / 2 - TEXT_FIELD_WIDTH / 2, 190);
@@ -225,19 +233,19 @@ public final class LoginGui extends Gui implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(@NotNull final KeyEvent e) {
 
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(@NotNull final KeyEvent e) {
         if (e.getKeyCode() != KeyEvent.VK_ENTER) return;
 
         login();
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(@NotNull final KeyEvent e) {
 
     }
     //</editor-fold>

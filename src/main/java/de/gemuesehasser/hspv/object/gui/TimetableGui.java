@@ -6,6 +6,7 @@ import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.component.LvsButton;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ public final class TimetableGui extends Gui implements KeyListener {
 
     //<editor-fold desc="CONSTANTS">
     /** Der Titel dieses Fensters. */
+    @NotNull
     private static final String TITLE = "HSPV-Stundenplan";
     /** Die Breite dieses Fensters */
     private static final int WIDTH = 550;
@@ -48,14 +50,19 @@ public final class TimetableGui extends Gui implements KeyListener {
 
     //<editor-fold desc="LOCAL FIELDS">
     /** Alle Buttons, der aktuellen Lehrveranstaltungen, die angezeigt werden in der aktuellen Woche. */
+    @NotNull
     private final List<JButton> lvsButtons = new ArrayList<>();
     /** Der Benutzername des Nutzers, für den der Stundenplan geladen wird. */
+    @NotNull
     private final String username;
     /** Eine Liste, der aktuellen Lehrveranstaltungen der aktuellen Woche. */
+    @NotNull
     private LinkedList<LVS> currentLvs;
     /** Das Datum, an welchem die aktuelle Woche startet (jeweils der Montag der Woche). */
+    @NotNull
     private LocalDate weekStartDate;
     /** Die aktuelle Anzahl an Wochen, welche die angezeigte Woche von der aktuellen Woche abweicht. */
+    @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
     private int currentWeek = 0;
     //</editor-fold>
 
@@ -66,7 +73,10 @@ public final class TimetableGui extends Gui implements KeyListener {
      * Erzeugt eine neue Instanz eines {@link TimetableGui} auf der Grundlage eines {@link Gui}. Das
      * {@link TimetableGui} stellt eine Instanz eines {@link Gui} dar, welches den Stundenplan anzeigt.
      */
-    public TimetableGui(@NotNull final String username, @NotNull final LoadingGui loadingGui) {
+    public TimetableGui(
+        @NotNull final String username,
+        @NotNull final LoadingGui loadingGui
+    ) {
         super(TITLE + " - " + username, WIDTH, HEIGHT);
         super.addKeyListener(this);
         super.setBounds(0, 0, WIDTH, HEIGHT);
@@ -100,7 +110,7 @@ public final class TimetableGui extends Gui implements KeyListener {
      * @param weekAddition Die Anzahl an Wochen, um die die aktuelle Woche geändert werden soll. Dabei funktionieren
      *                     positive und auch negative ganze Zahlen.
      */
-    public void loadWeek(final int weekAddition) {
+    public void loadWeek(@Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE) final int weekAddition) {
         currentWeek += weekAddition;
         this.currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
         super.remove(super.getDraw());
@@ -210,7 +220,8 @@ public final class TimetableGui extends Gui implements KeyListener {
      * @return Ein neuer {@link JButton} zum Wechseln der aktuellen Woche, welcher bereits in der Art und Weise
      *     formatiert ist, sodass dieser visuell zum {@link TimetableGui} passt.
      */
-    private JButton getWeekSwitchButton(final String text) {
+    @NotNull
+    private JButton getWeekSwitchButton(@NotNull final String text) {
         final JButton button = new JButton(text);
         button.setForeground(Color.WHITE);
         button.setBackground(Color.BLACK);
@@ -223,7 +234,7 @@ public final class TimetableGui extends Gui implements KeyListener {
 
     /* This drawing method includes everything under the buttons. */
     @Override
-    public void draw(@NotNull Graphics2D g) {
+    public void draw(@NotNull final Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
@@ -303,12 +314,12 @@ public final class TimetableGui extends Gui implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(@NotNull final KeyEvent e) {
 
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(@NotNull final KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 loadWeek(-1);
@@ -323,7 +334,7 @@ public final class TimetableGui extends Gui implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(@NotNull final KeyEvent e) {
 
     }
     //</editor-fold>
