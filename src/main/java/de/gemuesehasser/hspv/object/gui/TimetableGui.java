@@ -2,6 +2,7 @@ package de.gemuesehasser.hspv.object.gui;
 
 import de.gemuesehasser.hspv.handler.UserHandler;
 import de.gemuesehasser.hspv.handler.WeekTimetableHandler;
+import de.gemuesehasser.hspv.listener.LvsButtonMouseListener;
 import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.component.LvsButton;
 import org.apache.commons.lang3.StringUtils;
@@ -205,6 +206,7 @@ public final class TimetableGui extends Gui implements KeyListener {
             button.setFocusable(false);
             button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             button.addActionListener(e -> new LvsGui(this, lvs, username).open());
+            button.addMouseListener(new LvsButtonMouseListener(lvs, button));
 
             this.lvsButtons.add(button);
             super.add(button);
