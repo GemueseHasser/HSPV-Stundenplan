@@ -7,6 +7,7 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.CalendarComponent;
+import org.htmlunit.ElementNotFoundException;
 import org.htmlunit.WebClient;
 import org.htmlunit.WebResponse;
 import org.htmlunit.html.HtmlAnchor;
@@ -111,7 +112,7 @@ public final class ICalHandler {
                 return LOCAL_CALENDAR_BUILT;
             }
 
-            loadAntragoTimetable();
+            if (!loadAntragoTimetable()) return WRONG_LOGIN;
         } catch (@NotNull final IOException | ParserException e) {
             throw new RuntimeException(e);
         }
@@ -123,7 +124,7 @@ public final class ICalHandler {
      * Lädt die Kalender Datei von der Antrago Webseite und speichert diese in der lokalen Kalender-Datei ab.
      */
     @SneakyThrows
-    public void loadAntragoTimetable() {
+    public boolean loadAntragoTimetable() {
         final URL timetableUrlMember = new URL(TIMETABLE_URL_MEMBER);
         final URL timetableUrlLecturer = new URL(TIMETABLE_URL_LECTURER);
 
@@ -149,23 +150,29 @@ public final class ICalHandler {
             final HtmlPage tools = webClient.getPage("https://www.hspv.nrw.de/webtools");
             System.out.println("webtools opened.");
 
-            final HtmlAnchor lvsAnchor = tools.getAnchorByText("Lehrveranstaltungsplan");
-            final HtmlPage antragoPage = lvsAnchor.click();
+            try {
+                final HtmlAnchor lvsAnchor = tools.getAnchorByText("Lehrveranstaltungsplan");
+                final HtmlPage antragoPage = lvsAnchor.click();
 
-            final WebResponse response = webClient.getPage(
-                    antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
-            ).getWebResponse();
-            response.getWebRequest().setDefaultResponseContentCharset(StandardCharsets.UTF_8);
-            System.out.println("get response from antrago calender");
+                final WebResponse response = webClient.getPage(
+                        antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
+                ).getWebResponse();
+                response.getWebRequest().setDefaultResponseContentCharset(StandardCharsets.UTF_8);
+                System.out.println("get response from antrago calender");
 
-            UserHandler.saveTimetable(username, response.getContentAsString());
-            System.out.println("download completed from antrago.");
+                UserHandler.saveTimetable(username, response.getContentAsString());
+                System.out.println("download completed from antrago.");
+            } catch (@NotNull final ElementNotFoundException ignored) {
+                return false;
+            }
         }
 
         final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
         final CalendarBuilder builder = new CalendarBuilder();
         this.calendar = builder.build(calenderInput);
         System.out.println("local calender built.");
+
+        return true;
     }
 
     /**

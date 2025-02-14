@@ -146,6 +146,10 @@ public final class LoginGui extends Gui implements KeyListener {
         final ICalHandler iCalHandler = new ICalHandler(username, passwordText);
         final int icalReturnCode = iCalHandler.loadICalFile();
 
+        if (icalReturnCode == ICalHandler.NEW_USER_LOGIN) {
+            PasswordHandler.saveHashedPassword(username, passwordText);
+        }
+
         if (icalReturnCode == ICalHandler.WRONG_LOGIN) {
             loadingGui.dispose();
             wrongLoginData();
@@ -157,19 +161,27 @@ public final class LoginGui extends Gui implements KeyListener {
             if (!noInternetConnection(username, passwordText)) return;
         }
 
+        if (!PasswordHandler.validatePassword(username, passwordText)) {
+            loadingGui.dispose();
+            wrongLoginData();
+            return;
+        }
+
         // set timetable
         Timetable.setLvsMap(iCalHandler.getLvs());
 
         final TimetableGui timetableGui = new TimetableGui(username, loadingGui);
-        timetableGui.setTitle(timetableGui.getTitle() + " lokal");
         timetableGui.open();
 
         // save password
         PasswordHandler.saveHashedPassword(username, passwordText);
 
         if (icalReturnCode == ICalHandler.LOCAL_CALENDAR_BUILT) {
-            iCalHandler.loadAntragoTimetable();
+            timetableGui.setTitle(timetableGui.getTitle() + " lokal");
+
+            if (!iCalHandler.loadAntragoTimetable()) System.exit(0);
             Timetable.setLvsMap(iCalHandler.getLvs());
+
             timetableGui.loadWeek(0);
             timetableGui.setTitle(timetableGui.getTitle().replaceAll("lokal", "aktualisiert"));
         }
