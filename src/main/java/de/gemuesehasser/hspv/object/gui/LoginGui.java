@@ -128,7 +128,7 @@ public final class LoginGui extends Gui implements KeyListener {
         dataType.getProperties().setProperty(LAST_LOGIN_PROPERTY, usernameField.getText());
         dataType.saveProperties();
 
-        Executors.newScheduledThreadPool(1).schedule(this::loginAttemp, 100, TimeUnit.MILLISECONDS);
+        Executors.newScheduledThreadPool(1).schedule(this::loginAttemp, 80, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -161,10 +161,18 @@ public final class LoginGui extends Gui implements KeyListener {
         Timetable.setLvsMap(iCalHandler.getLvs());
 
         final TimetableGui timetableGui = new TimetableGui(username, loadingGui);
+        timetableGui.setTitle(timetableGui.getTitle() + " lokal");
         timetableGui.open();
 
         // save password
         PasswordHandler.saveHashedPassword(username, passwordText);
+
+        if (icalReturnCode == ICalHandler.LOCAL_CALENDAR_BUILT) {
+            iCalHandler.loadAntragoTimetable();
+            Timetable.setLvsMap(iCalHandler.getLvs());
+            timetableGui.loadWeek(0);
+            timetableGui.setTitle(timetableGui.getTitle().replaceAll("lokal", "aktualisiert"));
+        }
     }
 
     /**

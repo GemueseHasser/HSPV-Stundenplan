@@ -1,12 +1,12 @@
 package de.gemuesehasser.hspv.handler;
 
 import de.gemuesehasser.hspv.object.LVS;
+import lombok.SneakyThrows;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.CalendarComponent;
-import org.htmlunit.ElementNotFoundException;
 import org.htmlunit.WebClient;
 import org.htmlunit.WebResponse;
 import org.htmlunit.html.HtmlAnchor;
@@ -38,6 +38,18 @@ public final class ICalHandler {
     public static final int WRONG_LOGIN = 1;
     /** Der Rückgabewert, wenn keine Verbindung zum Host (Antrago) aufgebaut werden kann. */
     public static final int NO_CONNECTION_ERROR = 2;
+    /** Der Rückgabewert, wenn eine Verbindung besteht, aber dennoch vorerst ein Kalender aus einer lokalen Datei geladen wurde. */
+    public static final int LOCAL_CALENDAR_BUILT = 3;
+    /** Der Download-Link für den Stundenplan von Studenten. */
+    @NotNull
+    private static final String TIMETABLE_URL_MEMBER = (
+            "https://mvc.antrago.hspv.nrw.de/teilnehmerportal/Member/Stundenplan/ExportCalendar/download.ics?quelle=Veranstaltung&dataId=-1&year=2025&month=1"
+    );
+    /** Der Download-Link für den Stundenplan von Dozenten. */
+    @NotNull
+    private static final String TIMETABLE_URL_LECTURER = (
+            "https://mvc.antrago.hspv.nrw.de/docentIcsDownloadLink"
+    );
     //</editor-fold>
 
 
@@ -73,20 +85,13 @@ public final class ICalHandler {
 
 
     /**
-     * Lädt die Kalender Datei mit den Lehrveranstaltungen des jeweiligen Nutzers von der HSPV-Website.
+     * Lädt die Kalender Datei mit den Lehrveranstaltungen des jeweiligen Nutzers von der HSPV-Website oder zuerst lokal,
+     * wenn bereits eine Stundenplan-Datei für den Benutzer existiert.
      *
      * @return Es wird ein ganzzahliger Wert zurückgegeben, welcher den Ablauf des Prozesses repräsentiert.
      */
     public int loadICalFile() {
         try {
-            final URL timetableUrlMember = new URL(
-                "https://mvc.antrago.hspv.nrw.de/teilnehmerportal/Member/Stundenplan/ExportCalendar/download.ics?quelle=Veranstaltung&dataId=-1&year=2025&month=1"
-            );
-
-            final URL timetableUrlLecturer = new URL(
-                "https://mvc.antrago.hspv.nrw.de/docentIcsDownloadLink"
-            );
-
             if (!isConnectionPresent()) {
                 if (UserHandler.exists(username)) {
                     final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
@@ -98,49 +103,15 @@ public final class ICalHandler {
                 return NO_CONNECTION_ERROR;
             }
 
-            try (final WebClient webClient = new WebClient()) {
-                webClient.getOptions().setThrowExceptionOnScriptError(false);
-                webClient.getOptions().setJavaScriptEnabled(false);
-                webClient.getOptions().setRedirectEnabled(true);
-                webClient.getOptions().setCssEnabled(false);
-                webClient.getOptions().setUseInsecureSSL(true);
-                webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-                webClient.getCookieManager().setCookiesEnabled(true);
-
-                HtmlPage loginPage = webClient.getPage("https://www.hspv.nrw.de/anmelden");
-                System.out.println("HSPV-Login-Page opened.");
-
-                HtmlForm form = loginPage.getForms().get(0);
-                form.getInputByName("user").type(this.username);
-                form.getInputByName("pass").type(this.password);
-
-                form.getInputByName("submit").click();
-                System.out.println("User " + username + " logged in.");
-
-                final HtmlPage tools = webClient.getPage("https://www.hspv.nrw.de/webtools");
-                System.out.println("webtools opened.");
-
-                try {
-                    final HtmlAnchor lvsAnchor = tools.getAnchorByText("Lehrveranstaltungsplan");
-                    final HtmlPage antragoPage = lvsAnchor.click();
-
-                    final WebResponse response = webClient.getPage(
-                        antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
-                    ).getWebResponse();
-                    response.getWebRequest().setDefaultResponseContentCharset(StandardCharsets.UTF_8);
-                    System.out.println("get response from antrago calender");
-
-                    UserHandler.saveTimetable(username, response.getContentAsString());
-                    System.out.println("download completed from antrago.");
-                } catch (@NotNull final ElementNotFoundException ignored) {
-                    return WRONG_LOGIN;
-                }
+            if (UserHandler.exists(username)) {
+                final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
+                final CalendarBuilder builder = new CalendarBuilder();
+                this.calendar = builder.build(calenderInput);
+                System.out.println("local calender built with local timetable.");
+                return LOCAL_CALENDAR_BUILT;
             }
 
-            final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
-            final CalendarBuilder builder = new CalendarBuilder();
-            this.calendar = builder.build(calenderInput);
-            System.out.println("local calender built.");
+            loadAntragoTimetable();
         } catch (@NotNull final IOException | ParserException e) {
             throw new RuntimeException(e);
         }
@@ -148,6 +119,52 @@ public final class ICalHandler {
         return NO_ERROR;
     }
 
+
+    @SneakyThrows
+    public void loadAntragoTimetable() {
+        final URL timetableUrlMember = new URL(TIMETABLE_URL_MEMBER);
+        final URL timetableUrlLecturer = new URL(TIMETABLE_URL_LECTURER);
+
+        try (final WebClient webClient = new WebClient()) {
+            webClient.getOptions().setThrowExceptionOnScriptError(false);
+            webClient.getOptions().setJavaScriptEnabled(false);
+            webClient.getOptions().setRedirectEnabled(true);
+            webClient.getOptions().setCssEnabled(false);
+            webClient.getOptions().setUseInsecureSSL(true);
+            webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+            webClient.getCookieManager().setCookiesEnabled(true);
+
+            HtmlPage loginPage = webClient.getPage("https://www.hspv.nrw.de/anmelden");
+            System.out.println("HSPV-Login-Page opened.");
+
+            HtmlForm form = loginPage.getForms().get(0);
+            form.getInputByName("user").type(this.username);
+            form.getInputByName("pass").type(this.password);
+
+            form.getInputByName("submit").click();
+            System.out.println("User " + username + " logged in.");
+
+            final HtmlPage tools = webClient.getPage("https://www.hspv.nrw.de/webtools");
+            System.out.println("webtools opened.");
+
+            final HtmlAnchor lvsAnchor = tools.getAnchorByText("Lehrveranstaltungsplan");
+            final HtmlPage antragoPage = lvsAnchor.click();
+
+            final WebResponse response = webClient.getPage(
+                    antragoPage.getUrl().toString().contains("teilnehmerportal") ? timetableUrlMember : timetableUrlLecturer
+            ).getWebResponse();
+            response.getWebRequest().setDefaultResponseContentCharset(StandardCharsets.UTF_8);
+            System.out.println("get response from antrago calender");
+
+            UserHandler.saveTimetable(username, response.getContentAsString());
+            System.out.println("download completed from antrago.");
+        }
+
+        final FileInputStream calenderInput = new FileInputStream(UserHandler.getTimetable(username));
+        final CalendarBuilder builder = new CalendarBuilder();
+        this.calendar = builder.build(calenderInput);
+        System.out.println("local calender built.");
+    }
 
     /**
      * Gibt eine {@link LinkedHashMap} mit jeweils der Startzeit der jeweiligen Lehrveranstaltung und des jeweiligen
