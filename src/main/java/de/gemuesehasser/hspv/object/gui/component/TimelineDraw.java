@@ -37,7 +37,7 @@ public final class TimelineDraw extends JLabel {
         final int currentTimeY = (lvsAmount * 55) + breakAddition + (currentTimeMinuteAddition - (lvsAmount * 45 + breakAddition));
 
         g2d.setColor(Color.RED);
-        g2d.fillRect(40, 59 + currentTimeY, super.getWidth(), 3);
+        g2d.fillRect(40, 30 + currentTimeY, super.getWidth(), 3);
 
         repaint();
     }
