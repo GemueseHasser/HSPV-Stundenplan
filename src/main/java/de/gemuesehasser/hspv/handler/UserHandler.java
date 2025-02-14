@@ -47,7 +47,8 @@ public final class UserHandler {
      *     {@code false}.
      */
     public static boolean exists(@NotNull final String username) {
-        return Files.exists(new File(Timetable.CACHE_FOLDER + File.separator + "stundenplan_" + username + ".ics").toPath());
+        return Files.exists(new File(Timetable.CACHE_FOLDER + File.separator + "stundenplan_" + username + ".ics").toPath())
+                && PropertyType.DATA_FILE.getProperties().containsKey(username);
     }
 
     /**
