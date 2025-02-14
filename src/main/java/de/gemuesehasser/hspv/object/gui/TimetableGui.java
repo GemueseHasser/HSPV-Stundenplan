@@ -5,6 +5,8 @@ import de.gemuesehasser.hspv.handler.WeekTimetableHandler;
 import de.gemuesehasser.hspv.listener.LvsButtonMouseListener;
 import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.component.LvsButton;
+import de.gemuesehasser.hspv.object.gui.component.TimelineDraw;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -13,7 +15,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -21,7 +22,6 @@ import java.awt.event.KeyListener;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -88,7 +88,9 @@ public final class TimetableGui extends Gui implements KeyListener {
         this.currentLvs = WeekTimetableHandler.getWeekLvs(currentWeek);
         this.weekStartDate = currentLvs.getFirst().getStart().toLocalDate();
 
-        loadLvsButtons();
+        final TimelineDraw timelineDraw = new TimelineDraw();
+        timelineDraw.setBounds(0, 0, WIDTH, HEIGHT);
+        timelineDraw.setVisible(true);
 
         final JButton left = getWeekSwitchButton("<");
         left.setBounds(45, HEIGHT - 100, 50, 50);
@@ -98,8 +100,11 @@ public final class TimetableGui extends Gui implements KeyListener {
         right.setBounds(WIDTH - 80, HEIGHT - 100, 50, 50);
         right.addActionListener(e -> loadWeek(1));
 
+        super.add(timelineDraw);
         super.add(left);
         super.add(right);
+
+        loadLvsButtons();
     }
     //</editor-fold>
 
@@ -236,6 +241,7 @@ public final class TimetableGui extends Gui implements KeyListener {
 
     /* This drawing method includes everything under the buttons. */
     @Override
+    @SneakyThrows
     public void draw(@NotNull final Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -290,29 +296,6 @@ public final class TimetableGui extends Gui implements KeyListener {
                 80 + i * 55 + breakAddition
             );
         }
-    }
-
-    /* This drawing method includes everything over the buttons -> needs more resources. */
-    @Override
-    public void paint(@NotNull final Graphics graphics) {
-        super.paint(graphics);
-
-        final Graphics2D g = (Graphics2D) graphics;
-
-        // get current local time
-        final LocalDateTime currentTime = LocalDateTime.now();
-
-        // display current local time as red line
-        final int currentTimeMinuteAddition = (currentTime.getHour() - 8) * 60 + currentTime.getMinute();
-        final int lvsAmount = (currentTimeMinuteAddition - ((currentTimeMinuteAddition / 90) * 15)) / 45;
-        final int breakAddition = (lvsAmount / 2) * 15 + (lvsAmount / 6 == 1 ? 15 : 0);
-
-        final int currentTimeY = (lvsAmount * 55) + breakAddition + (currentTimeMinuteAddition - (lvsAmount * 45 + breakAddition));
-
-        g.setColor(Color.RED);
-        g.fillRect(40, 59 + currentTimeY, WIDTH, 3);
-
-        repaint();
     }
 
     @Override
