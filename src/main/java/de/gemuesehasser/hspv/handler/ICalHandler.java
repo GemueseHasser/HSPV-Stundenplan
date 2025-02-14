@@ -32,8 +32,8 @@ import java.util.Optional;
 public final class ICalHandler {
 
     //<editor-fold desc="CONSTANTS">
-    /** Der Rückgabewert, wenn es beim Laden keinen Fehlern gab. */
-    public static final int NO_ERROR = 0;
+    /** Der Rückgabewert, wenn sich ein neuer Nutzer angemeldet hat und die Kalender Datei direkt online geladen wurde. */
+    public static final int NEW_USER_LOGIN = 0;
     /** Der Rückgabewert, wenn bei der Anmeldung ein Fehler aufgetreten ist. */
     public static final int WRONG_LOGIN = 1;
     /** Der Rückgabewert, wenn keine Verbindung zum Host (Antrago) aufgebaut werden kann. */
@@ -116,10 +116,12 @@ public final class ICalHandler {
             throw new RuntimeException(e);
         }
 
-        return NO_ERROR;
+        return NEW_USER_LOGIN;
     }
 
-
+    /**
+     * Lädt die Kalender Datei von der Antrago Webseite und speichert diese in der lokalen Kalender-Datei ab.
+     */
     @SneakyThrows
     public void loadAntragoTimetable() {
         final URL timetableUrlMember = new URL(TIMETABLE_URL_MEMBER);
