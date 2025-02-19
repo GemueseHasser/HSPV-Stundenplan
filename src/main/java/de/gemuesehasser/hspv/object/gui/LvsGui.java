@@ -20,7 +20,7 @@ public final class LvsGui extends Gui {
     /** Die Breite dieses Fensters. */
     private static final int WIDTH = 450;
     /** Die Höhe dieses Fensters. */
-    private static final int HEIGHT = 270;
+    private static final int HEIGHT = 200;
     /** Die Breite des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
     private static final int COLOR_PICKER_WIDTH = 600;
     /** Die Höhe des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
@@ -93,7 +93,7 @@ public final class LvsGui extends Gui {
         colorButton.setBounds(100, 90, 50, 30);
         colorButton.setBackground(lvs.getColor());
         colorButton.setFocusable(false);
-        colorButton.addActionListener(e -> openColorPicker(colorButton));
+        colorButton.addActionListener(e -> openColorPicker());
 
         super.add(colorButton);
     }
@@ -103,11 +103,8 @@ public final class LvsGui extends Gui {
     /**
      * Öffnet einen {@link ColorPicker} für diese Lehrveranstaltung, mit dem sich die Hintergrundfarbe individualisieren
      * lässt.
-     *
-     * @param colorButton Der Button, von dem aus dieser Color-Picker geöffnet wurde. Dieser Button wird nach Auswahl
-     *                    der Farbe in derselben eingefärbt.
      */
-    private void openColorPicker(@NotNull final JButton colorButton) {
+    private void openColorPicker() {
         final JFrame frame = new JFrame();
         frame.setBounds(0, 0, COLOR_PICKER_WIDTH, COLOR_PICKER_HEIGHT + 70);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -115,7 +112,12 @@ public final class LvsGui extends Gui {
         frame.setLayout(null);
         frame.setLocationRelativeTo(null);
 
-        final JPanel colorPickerPanel = getColorPickerPanel(colorButton);
+        final JPanel colorPickerPanel = new JPanel();
+        colorPickerPanel.setBounds(10, 10, COLOR_PICKER_WIDTH - 50, COLOR_PICKER_HEIGHT - 30);
+
+        final ColorPicker colorPicker = new ColorPicker(true, true, Locale.GERMAN);
+        colorPicker.setColor(lvs.getColor());
+        colorPickerPanel.add(colorPicker);
 
         final JButton saveButton = new JButton("Speichern");
         saveButton.setBounds(COLOR_PICKER_WIDTH / 2 - 50, COLOR_PICKER_HEIGHT - 30, 100, 40);
@@ -124,7 +126,7 @@ public final class LvsGui extends Gui {
         saveButton.addActionListener(e -> {
             super.dispose();
             frame.dispose();
-            save();
+            save(colorPicker.getColor());
         });
 
         frame.add(saveButton);
@@ -133,38 +135,10 @@ public final class LvsGui extends Gui {
     }
 
     /**
-     * Gibt auf der Grundlage des Buttons, welcher für die Änderung der Farbe dieser Lehrveranstaltung zuständig ist, ein
-     * Panel zurück, welches ein {@link ColorPicker} beinhaltet, womit eine individuelle Farbe für diese Lehrveranstaltung
-     * neu ausgewählt werden kann.
-     *
-     * @param colorButton Der Button, welcher die Änderung der Farbe dieser Lehrveranstaltung ausgelöst hat.
-     *
-     * @return Ein Panel, welches den {@link ColorPicker} beinhaltet, womit die Farbe für diese Lehrveranstaltung individuell
-     *      neu ausgewählt werden kann.
-     */
-    @NotNull
-    private JPanel getColorPickerPanel(@NotNull final JButton colorButton) {
-        final JPanel colorPickerPanel = new JPanel();
-        colorPickerPanel.setBounds(10, 10, COLOR_PICKER_WIDTH - 50, COLOR_PICKER_HEIGHT - 30);
-
-        final ColorPicker colorPicker = new ColorPicker(true, true, Locale.GERMAN);
-        colorPicker.setColor(lvs.getColor());
-        colorPicker.addColorListener(colorModel -> {
-            final Color color = colorModel.getColor();
-
-            colorButton.setBackground(color);
-            lvs.setColor(color);
-        });
-        colorPickerPanel.add(colorPicker);
-
-        return colorPickerPanel;
-    }
-
-    /**
      * Speichert alle Einstellungen in diesem {@link LvsGui} ab und lädt die aktuelle Woche neu.
      */
-    private void save() {
-        UserHandler.saveConfiguration(username, "color." + lvsName, String.valueOf(lvs.getColor().getRGB()));
+    private void save(@NotNull final Color color) {
+        UserHandler.saveConfiguration(username, "color." + lvsName, String.valueOf(color.getRGB()));
 
         timetableGui.loadWeek(0);
     }
