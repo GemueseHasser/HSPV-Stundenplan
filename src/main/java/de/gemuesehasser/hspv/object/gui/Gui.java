@@ -72,7 +72,7 @@ public abstract class Gui extends JFrame {
     /**
      * Die Zeichen-Instanz dieses Fensters, womit man auf dieses Fenster zeichnen kann.
      */
-    private final class Draw extends JLabel {
+    public final class Draw extends JLabel {
 
         //<editor-fold desc="implementation">
         @Override

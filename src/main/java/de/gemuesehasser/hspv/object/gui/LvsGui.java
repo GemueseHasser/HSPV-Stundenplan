@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 public final class LvsGui extends Gui implements MouseListener {
 
     //<editor-fold desc="CONSTANTS">
-    /** Die Breite dieses Fensters. */
-    private static final int WIDTH = 450;
+    /** Die minimale Breite dieses Fensters. */
+    private static final int MINIMUM_WIDTH = 300;
     /** Die Höhe dieses Fensters. */
     private static final int HEIGHT = 200;
     /** Die Breite des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
@@ -73,12 +73,10 @@ public final class LvsGui extends Gui implements MouseListener {
         @NotNull final LVS lvs,
         @NotNull final String username
     ) {
-        super("", WIDTH, HEIGHT);
-        super.setUndecorated(true);
-        super.setShape(new RoundRectangle2D.Double(0, 0, WIDTH, HEIGHT, 30, 30));
-        super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        super.addMouseListener(this);
+        // create gui instance
+        super("", 0, HEIGHT);
 
+        // init vars
         this.timetableGui = timetableGui;
         this.lvs = lvs;
         this.username = username;
@@ -96,8 +94,30 @@ public final class LvsGui extends Gui implements MouseListener {
         this.room = (descriptionParts.length > 2 ? descriptionParts[2] : "");
         this.docentName = (descriptionParts.length > 3 ? descriptionParts[3] : "");
 
+        // set gui properties
         super.setTitle(lvsName);
+        super.setUndecorated(true);
+        super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        super.addMouseListener(this);
 
+        final int lvsNameWidth = super.getFontMetrics(Timetable.DEFAULT_FONT.deriveFont(18F)).stringWidth(lvsName) + 50;
+
+        super.setSize(Math.max(lvsNameWidth, MINIMUM_WIDTH), HEIGHT);
+        super.setShape(
+                new RoundRectangle2D.Double(
+                        0,
+                        0,
+                        super.getWidth(),
+                        HEIGHT,
+                        30,
+                        30
+                )
+        );
+
+        // update draw size
+        super.getDraw().setBounds(0, 0, super.getWidth(), HEIGHT);
+
+        // create color button
         final JButton colorButton = new JButton();
         colorButton.setBounds(100, 120, 50, 30);
         colorButton.setBackground(lvs.getColor());
@@ -157,7 +177,7 @@ public final class LvsGui extends Gui implements MouseListener {
     @Override
     public void draw(@NotNull final Graphics2D g) {
         g.setColor(Color.GRAY);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.fillRect(0, 0, super.getWidth(), HEIGHT);
 
         g.setColor(Color.WHITE);
         g.setFont(Timetable.DEFAULT_FONT.deriveFont(18F));
