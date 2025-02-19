@@ -5,11 +5,9 @@ import de.gemuesehasser.hspv.handler.UserHandler;
 import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.*;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.Locale;
 
 /**
@@ -24,7 +22,7 @@ public final class LvsGui extends Gui {
     /** Die Höhe dieses Fensters. */
     private static final int HEIGHT = 270;
     /** Die Breite des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
-    private static final int COLOR_PICKER_WIDTH = 500;
+    private static final int COLOR_PICKER_WIDTH = 600;
     /** Die Höhe des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
     private static final int COLOR_PICKER_HEIGHT = 400;
     //</editor-fold>
@@ -97,17 +95,7 @@ public final class LvsGui extends Gui {
         colorButton.setFocusable(false);
         colorButton.addActionListener(e -> openColorPicker(colorButton));
 
-        final JButton saveButton = new JButton("Speichern");
-        saveButton.setBounds(WIDTH / 2 - 50, HEIGHT - 80, 100, 30);
-        saveButton.setBackground(Color.LIGHT_GRAY);
-        saveButton.setFocusable(false);
-        saveButton.addActionListener(e -> {
-            super.dispose();
-            save();
-        });
-
         super.add(colorButton);
-        super.add(saveButton);
     }
     //</editor-fold>
 
@@ -121,10 +109,43 @@ public final class LvsGui extends Gui {
      */
     private void openColorPicker(@NotNull final JButton colorButton) {
         final JFrame frame = new JFrame();
-        frame.setBounds(0, 0, COLOR_PICKER_WIDTH, COLOR_PICKER_HEIGHT);
+        frame.setBounds(0, 0, COLOR_PICKER_WIDTH, COLOR_PICKER_HEIGHT + 70);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setResizable(false);
+        frame.setLayout(null);
         frame.setLocationRelativeTo(null);
+
+        final JPanel colorPickerPanel = getColorPickerPanel(colorButton);
+
+        final JButton saveButton = new JButton("Speichern");
+        saveButton.setBounds(COLOR_PICKER_WIDTH / 2 - 50, COLOR_PICKER_HEIGHT - 30, 100, 40);
+        saveButton.setBackground(Color.LIGHT_GRAY);
+        saveButton.setFocusable(false);
+        saveButton.addActionListener(e -> {
+            super.dispose();
+            frame.dispose();
+            save();
+        });
+
+        frame.add(saveButton);
+        frame.add(colorPickerPanel);
+        frame.setVisible(true);
+    }
+
+    /**
+     * Gibt auf der Grundlage des Buttons, welcher für die Änderung der Farbe dieser Lehrveranstaltung zuständig ist, ein
+     * Panel zurück, welches ein {@link ColorPicker} beinhaltet, womit eine individuelle Farbe für diese Lehrveranstaltung
+     * neu ausgewählt werden kann.
+     *
+     * @param colorButton Der Button, welcher die Änderung der Farbe dieser Lehrveranstaltung ausgelöst hat.
+     *
+     * @return Ein Panel, welches den {@link ColorPicker} beinhaltet, womit die Farbe für diese Lehrveranstaltung individuell
+     *      neu ausgewählt werden kann.
+     */
+    @NotNull
+    private JPanel getColorPickerPanel(@NotNull final JButton colorButton) {
+        final JPanel colorPickerPanel = new JPanel();
+        colorPickerPanel.setBounds(10, 10, COLOR_PICKER_WIDTH - 50, COLOR_PICKER_HEIGHT - 30);
 
         final ColorPicker colorPicker = new ColorPicker(true, true, Locale.GERMAN);
         colorPicker.setColor(lvs.getColor());
@@ -134,9 +155,9 @@ public final class LvsGui extends Gui {
             colorButton.setBackground(color);
             lvs.setColor(color);
         });
+        colorPickerPanel.add(colorPicker);
 
-        frame.add(colorPicker);
-        frame.setVisible(true);
+        return colorPickerPanel;
     }
 
     /**
