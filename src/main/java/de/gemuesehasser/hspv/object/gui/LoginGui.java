@@ -246,6 +246,7 @@ public final class LoginGui extends Gui implements KeyListener {
 
     @Override
     public void draw(@NotNull final Graphics2D g) {
+        g.setFont(Timetable.DEFAULT_FONT);
         g.drawImage(hspvLogo, -10, 0, LOGO_WIDTH, LOGO_HEIGHT, null);
 
         g.drawString("Benutzername", WIDTH / 2 - TEXT_FIELD_WIDTH / 2, 190);

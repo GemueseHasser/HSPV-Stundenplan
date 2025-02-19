@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +22,9 @@ public class Timetable {
     /** Der Cache-Ordner dieser Anwendung, in welcher die Benutzer-Dateien gespeichert werden. */
     @NotNull
     public static final String CACHE_FOLDER = System.getProperty("user.home") + File.separator + ".stundenplan_cache";
+    /** Die Standardschriftart für diese Anwendung. */
+    @NotNull
+    public static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 15);
     //</editor-fold>
 
     //<editor-fold desc="STATIC FIELDS">

@@ -14,9 +14,7 @@ import org.jetbrains.annotations.Range;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.time.DayOfWeek;
@@ -210,7 +208,12 @@ public final class TimetableGui extends Gui implements KeyListener {
             button.setBackground(lvs.getColor());
             button.setFocusable(false);
             button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-            button.addActionListener(e -> new LvsGui(this, lvs, username).open());
+            button.addActionListener(e -> {
+                final LvsGui lvsGui = new LvsGui(this, lvs, username);
+                final Point mousePoint = MouseInfo.getPointerInfo().getLocation();
+                lvsGui.setLocation(mousePoint.x - 5, mousePoint.y - 5);
+                lvsGui.open();
+            });
             button.addMouseListener(new LvsButtonMouseListener(lvs, button));
 
             this.lvsButtons.add(button);

@@ -1,6 +1,7 @@
 package de.gemuesehasser.hspv.object.gui;
 
 import com.bric.colorpicker.ColorPicker;
+import de.gemuesehasser.hspv.Timetable;
 import de.gemuesehasser.hspv.handler.UserHandler;
 import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
@@ -8,13 +9,18 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Ein {@link LvsGui} stellt eine Instanz eines {@link Gui Fensters} dar, in welchem für eine bestimmte
  * Lehrveranstaltung genauere Daten angezeigt werden, als die, die im Stundenplan angezeigt werden.
  */
-public final class LvsGui extends Gui {
+public final class LvsGui extends Gui implements MouseListener {
 
     //<editor-fold desc="CONSTANTS">
     /** Die Breite dieses Fensters. */
@@ -68,7 +74,10 @@ public final class LvsGui extends Gui {
         @NotNull final String username
     ) {
         super("", WIDTH, HEIGHT);
+        super.setUndecorated(true);
+        super.setShape(new RoundRectangle2D.Double(0, 0, WIDTH, HEIGHT, 30, 30));
         super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        super.addMouseListener(this);
 
         this.timetableGui = timetableGui;
         this.lvs = lvs;
@@ -90,7 +99,7 @@ public final class LvsGui extends Gui {
         super.setTitle(lvsName);
 
         final JButton colorButton = new JButton();
-        colorButton.setBounds(100, 90, 50, 30);
+        colorButton.setBounds(100, 120, 50, 30);
         colorButton.setBackground(lvs.getColor());
         colorButton.setFocusable(false);
         colorButton.addActionListener(e -> openColorPicker());
@@ -105,7 +114,7 @@ public final class LvsGui extends Gui {
      * lässt.
      */
     private void openColorPicker() {
-        final JFrame frame = new JFrame();
+        final JFrame frame = new JFrame(lvsName);
         frame.setBounds(0, 0, COLOR_PICKER_WIDTH, COLOR_PICKER_HEIGHT + 70);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setResizable(false);
@@ -147,11 +156,52 @@ public final class LvsGui extends Gui {
 
     @Override
     public void draw(@NotNull final Graphics2D g) {
-        g.drawString("LVS: " + lvsName, 20, 20);
-        g.drawString("Modul: " + module, 20, 40);
-        g.drawString("Raum: " + room, 20, 60);
-        g.drawString("DozentIn: " + docentName, 20, 80);
-        g.drawString("LVS-Farbe: ", 20, 108);
+        g.setColor(Color.GRAY);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+
+        g.setColor(Color.WHITE);
+        g.setFont(Timetable.DEFAULT_FONT.deriveFont(18F));
+        g.drawString(lvsName, 20, 40);
+        g.drawLine(
+                22,
+                42,
+                g.getFontMetrics().stringWidth(lvsName) + 22,
+                42
+        );
+
+        g.setFont(Timetable.DEFAULT_FONT);
+        g.drawString("Modul: " + module, 20, 70);
+        g.drawString("Raum: " + room, 20, 90);
+        g.drawString("DozentIn: " + docentName, 20, 110);
+        g.drawString("LVS-Farbe: ", 20, 140);
+    }
+
+    @Override
+    public void mouseClicked(@NotNull final MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(@NotNull final MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(@NotNull final MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(@NotNull final MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(@NotNull final MouseEvent e) {
+        if (super.contains(e.getPoint()) && e.getX() > 20 && e.getY() > 20) return;
+
+        super.removeMouseListener(this);
+        Executors.newScheduledThreadPool(1).schedule(super::dispose, 400, TimeUnit.MILLISECONDS);
     }
     //</editor-fold>
 }
