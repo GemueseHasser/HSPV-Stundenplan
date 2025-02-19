@@ -113,6 +113,7 @@ public final class LvsGui extends Gui implements MouseListener {
                         30
                 )
         );
+        super.getRootPane().setBorder(BorderFactory.createLineBorder(Color.PINK, 2));
 
         // update draw size
         super.getDraw().setBounds(0, 0, super.getWidth(), HEIGHT);
