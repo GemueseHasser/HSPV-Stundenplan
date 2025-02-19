@@ -134,6 +134,8 @@ public final class LvsGui extends Gui implements MouseListener {
      * lässt.
      */
     private void openColorPicker() {
+        super.dispose();
+
         final JFrame frame = new JFrame(lvsName);
         frame.setBounds(0, 0, COLOR_PICKER_WIDTH, COLOR_PICKER_HEIGHT + 70);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -153,7 +155,6 @@ public final class LvsGui extends Gui implements MouseListener {
         saveButton.setBackground(Color.LIGHT_GRAY);
         saveButton.setFocusable(false);
         saveButton.addActionListener(e -> {
-            super.dispose();
             frame.dispose();
             save(colorPicker.getColor());
         });
