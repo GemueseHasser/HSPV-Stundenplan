@@ -22,7 +22,7 @@ public final class LVS {
     /** Der höchste zufällig generierte Wert der Farbe Rot / Grün / Blau. */
     private static final int HIGHEST_COLOR_VALUE = 250;
     /** Der niedrigste zufällig generierte Wert der Farbe Rot / Grün / Blau. */
-    private static final int LOWEST_COLOR_VALUE = 165;
+    private static final int LOWEST_COLOR_VALUE = 115;
     //</editor-fold>
 
 
