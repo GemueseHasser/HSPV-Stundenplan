@@ -1,5 +1,6 @@
 package de.gemuesehasser.hspv;
 
+import de.gemuesehasser.hspv.constant.ImageType;
 import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.LoginGui;
 import lombok.Getter;
@@ -44,10 +45,21 @@ public class Timetable {
      */
     public static void main(@NotNull final String @NotNull [] args) throws IOException {
         Files.createDirectories(new File(CACHE_FOLDER).toPath());
+        loadImages();
 
         final LoginGui loginGui = new LoginGui(false);
         loginGui.open();
     }
     //</editor-fold>
+
+
+    /**
+     * Lädt alle Bilder, die im {@link ImageType} hinterlegt sind.
+     */
+    private static void loadImages() {
+        for (@NotNull final ImageType imageType : ImageType.values()) {
+            imageType.initImage();
+        }
+    }
 
 }
