@@ -33,9 +33,9 @@ public final class LvsGui extends Gui implements MouseListener {
     /** Die Höhe des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
     private static final int COLOR_PICKER_HEIGHT = 400;
     /** Die x-Koordinate, an der der Text beginnt, welcher diese LVS beschreibt. */
-    private static final int TEXT_BEGIN_X = 25;
+    private static final int TEXT_BEGIN_X = 20;
     /** Die x-Koordinate des Buttons, mit welchem sich die Farbe der LVS ändern lässt. */
-    private static final int COLOR_BUTTON_X = 105;
+    private static final int COLOR_BUTTON_X = 100;
     //</editor-fold>
 
 
@@ -199,11 +199,11 @@ public final class LvsGui extends Gui implements MouseListener {
         g.setColor(Color.WHITE);
         g.setFont(Timetable.DEFAULT_FONT.deriveFont(18F));
         final int nameWidth = g.getFontMetrics().stringWidth(lvsName);
-        g.drawString(lvsName, super.getWidth() / 2 - nameWidth / 2, 40);
+        g.drawString(lvsName, super.getWidth() / 2 - nameWidth / 2 - 8, 40);
         g.drawLine(
-                super.getWidth() / 2 - nameWidth / 2,
+                super.getWidth() / 2 - nameWidth / 2 - 5,
                 42,
-                super.getWidth() / 2 + nameWidth / 2,
+                super.getWidth() / 2 + nameWidth / 2 - 3,
                 42
         );
 
