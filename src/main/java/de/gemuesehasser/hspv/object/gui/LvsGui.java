@@ -4,6 +4,7 @@ import com.bric.colorpicker.ColorPicker;
 import de.gemuesehasser.hspv.Timetable;
 import de.gemuesehasser.hspv.constant.ImageType;
 import de.gemuesehasser.hspv.handler.UserHandler;
+import de.gemuesehasser.hspv.object.Gui;
 import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
 

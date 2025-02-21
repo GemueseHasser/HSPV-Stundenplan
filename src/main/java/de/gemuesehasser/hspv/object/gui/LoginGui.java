@@ -6,6 +6,7 @@ import de.gemuesehasser.hspv.constant.PropertyType;
 import de.gemuesehasser.hspv.handler.ICalHandler;
 import de.gemuesehasser.hspv.handler.PasswordHandler;
 import de.gemuesehasser.hspv.handler.UserHandler;
+import de.gemuesehasser.hspv.object.Gui;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JButton;

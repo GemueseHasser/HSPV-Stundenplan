@@ -1,4 +1,4 @@
-package de.gemuesehasser.hspv.object.gui;
+package de.gemuesehasser.hspv.object;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;

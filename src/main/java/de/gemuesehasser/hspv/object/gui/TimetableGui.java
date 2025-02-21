@@ -3,6 +3,7 @@ package de.gemuesehasser.hspv.object.gui;
 import de.gemuesehasser.hspv.handler.UserHandler;
 import de.gemuesehasser.hspv.handler.WeekTimetableHandler;
 import de.gemuesehasser.hspv.listener.LvsButtonMouseListener;
+import de.gemuesehasser.hspv.object.Gui;
 import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.component.LvsButton;
 import de.gemuesehasser.hspv.object.gui.component.TimelineDraw;
