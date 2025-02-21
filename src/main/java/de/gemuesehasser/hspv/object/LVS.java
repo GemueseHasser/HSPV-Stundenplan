@@ -35,6 +35,8 @@ public final class LVS {
     //</editor-fold>
 
 
+    //<editor-fold desc="utility">
+
     /**
      * Gibt eine zufällige, aber schlichte Farbe zurück, mit der die Lehrveranstaltung initialisiert wird, wenn der
      * Nutzer keine eigene Farbe festgelegt hat.
@@ -43,7 +45,7 @@ public final class LVS {
      *     keine eigene Farbe festgelegt hat.
      */
     @NotNull
-    private Color getRandomColor() {
+    private static Color getRandomColor() {
         final Random random = new Random();
         final int colorChoice = random.nextInt(3);
 
@@ -56,4 +58,5 @@ public final class LVS {
 
         return new Color(r, g, b);
     }
+    //</editor-fold>
 }

@@ -193,11 +193,9 @@ public final class LvsGui extends Gui implements MouseListener {
 
     @Override
     public void draw(@NotNull final Graphics2D g) {
-        g.setColor(Color.GRAY);
         g.drawImage(ImageType.LVS_BACKGROUND.getImage(), 0, 0, super.getWidth(), HEIGHT, null);
-        //g.fillRect(0, 0, super.getWidth(), HEIGHT);
 
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
         g.setFont(Timetable.DEFAULT_FONT.deriveFont(18F));
         final int nameWidth = g.getFontMetrics().stringWidth(lvsName);
         g.drawString(lvsName, super.getWidth() / 2 - nameWidth / 2 - 8, 40);
