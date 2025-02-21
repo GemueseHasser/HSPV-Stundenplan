@@ -2,6 +2,7 @@ package de.gemuesehasser.hspv.object.gui;
 
 import com.bric.colorpicker.ColorPicker;
 import de.gemuesehasser.hspv.Timetable;
+import de.gemuesehasser.hspv.constant.ImageType;
 import de.gemuesehasser.hspv.handler.UserHandler;
 import de.gemuesehasser.hspv.object.LVS;
 import org.jetbrains.annotations.NotNull;
@@ -26,11 +27,15 @@ public final class LvsGui extends Gui implements MouseListener {
     /** Die minimale Breite dieses Fensters. */
     private static final int MINIMUM_WIDTH = 300;
     /** Die Höhe dieses Fensters. */
-    private static final int HEIGHT = 200;
+    private static final int HEIGHT = 240;
     /** Die Breite des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
     private static final int COLOR_PICKER_WIDTH = 600;
     /** Die Höhe des Color-Chooser, mit dem sich die Farbe der LVS individualisieren lässt. */
     private static final int COLOR_PICKER_HEIGHT = 400;
+    /** Die x-Koordinate, an der der Text beginnt, welcher diese LVS beschreibt. */
+    private static final int TEXT_BEGIN_X = 25;
+    /** Die x-Koordinate des Buttons, mit welchem sich die Farbe der LVS ändern lässt. */
+    private static final int COLOR_BUTTON_X = 105;
     //</editor-fold>
 
 
@@ -66,7 +71,11 @@ public final class LvsGui extends Gui implements MouseListener {
      * dar, in welchem für eine bestimmte Lehrveranstaltung genauere Daten angezeigt werden, als die, die im Stundenplan
      * angezeigt werden.
      *
-     * @param lvs Die jeweilige Lehrveranstaltung, auf dessen Grundlage dieses Fenster erzeugt werden soll.
+     * @param timetableGui Das {@link TimetableGui Fenster}, in welchem die LVS-Buttons platziert wurden, für die dieses
+     *                     {@link LvsGui} instanziiert werden soll.
+     * @param lvs          Die jeweilige Lehrveranstaltung, auf dessen Grundlage dieses Fenster erzeugt werden soll.
+     * @param username     Der Benutzername des Nutzers, der aktuell angemeldet ist und für den der Stundenplan aktuell
+     *                     geladen wurde.
      */
     public LvsGui(
         @NotNull final TimetableGui timetableGui,
@@ -109,18 +118,23 @@ public final class LvsGui extends Gui implements MouseListener {
                         0,
                         super.getWidth(),
                         HEIGHT,
-                        30,
-                        30
+                        25,
+                        25
                 )
         );
-        super.getRootPane().setBorder(BorderFactory.createLineBorder(Color.PINK, 2));
+        super.getRootPane().setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
 
         // update draw size
         super.getDraw().setBounds(0, 0, super.getWidth(), HEIGHT);
 
         // create color button
         final JButton colorButton = new JButton();
-        colorButton.setBounds(100, 120, 50, 30);
+        colorButton.setBounds(
+                COLOR_BUTTON_X,
+                130,
+                50,
+                30
+        );
         colorButton.setBackground(lvs.getColor());
         colorButton.setFocusable(false);
         colorButton.addActionListener(e -> openColorPicker());
@@ -179,23 +193,28 @@ public final class LvsGui extends Gui implements MouseListener {
     @Override
     public void draw(@NotNull final Graphics2D g) {
         g.setColor(Color.GRAY);
-        g.fillRect(0, 0, super.getWidth(), HEIGHT);
+        g.drawImage(ImageType.LVS_BACKGROUND.getImage(), 0, 0, super.getWidth(), HEIGHT, null);
+        //g.fillRect(0, 0, super.getWidth(), HEIGHT);
 
         g.setColor(Color.WHITE);
         g.setFont(Timetable.DEFAULT_FONT.deriveFont(18F));
-        g.drawString(lvsName, 20, 40);
+        final int nameWidth = g.getFontMetrics().stringWidth(lvsName);
+        g.drawString(lvsName, super.getWidth() / 2 - nameWidth / 2, 40);
         g.drawLine(
-                22,
+                super.getWidth() / 2 - nameWidth / 2,
                 42,
-                g.getFontMetrics().stringWidth(lvsName) + 22,
+                super.getWidth() / 2 + nameWidth / 2,
                 42
         );
 
         g.setFont(Timetable.DEFAULT_FONT);
-        g.drawString("Modul: " + module, 20, 70);
-        g.drawString("Raum: " + room, 20, 90);
-        g.drawString("DozentIn: " + docentName, 20, 110);
-        g.drawString("LVS-Farbe: ", 20, 140);
+        g.drawString("Modul:", TEXT_BEGIN_X, 80);
+        g.drawString(module, COLOR_BUTTON_X, 80);
+        g.drawString("Raum:", TEXT_BEGIN_X, 100);
+        g.drawString(room, COLOR_BUTTON_X, 100);
+        g.drawString("DozentIn:", TEXT_BEGIN_X, 120);
+        g.drawString(docentName, COLOR_BUTTON_X, 120);
+        g.drawString("LVS-Farbe:", TEXT_BEGIN_X, 150);
     }
 
     @Override

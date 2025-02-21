@@ -1,25 +1,21 @@
 package de.gemuesehasser.hspv.object.gui;
 
 import de.gemuesehasser.hspv.Timetable;
+import de.gemuesehasser.hspv.constant.ImageType;
 import de.gemuesehasser.hspv.constant.PropertyType;
 import de.gemuesehasser.hspv.handler.ICalHandler;
 import de.gemuesehasser.hspv.handler.PasswordHandler;
 import de.gemuesehasser.hspv.handler.UserHandler;
 import org.jetbrains.annotations.NotNull;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -62,8 +58,6 @@ public final class LoginGui extends Gui implements KeyListener {
     /** Die {@link LoadingGui Lade-Animation}, die angezeigt wird, sobald die Benutzerdaten abgeschickt wurden. */
     @NotNull
     private final LoadingGui loadingGui = new LoadingGui();
-    /** Das HSPV-Logo, welches im Login-Bereich angezeigt wird. */
-    private BufferedImage hspvLogo;
     //</editor-fold>
 
 
@@ -80,16 +74,6 @@ public final class LoginGui extends Gui implements KeyListener {
     public LoginGui(final boolean error) {
         super((error ? "Fehlerhafter Login" : TITLE), WIDTH, HEIGHT);
         super.addKeyListener(this);
-
-        try {
-            hspvLogo = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/hspv.png")));
-        } catch (@NotNull final IOException ignored) {
-            hspvLogo = new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
-            final Graphics2D logoGraphics = (Graphics2D) hspvLogo.getGraphics();
-            logoGraphics.setColor(Color.BLACK);
-            logoGraphics.fillRect(0, 0, 30, 30);
-            logoGraphics.dispose();
-        }
 
         usernameField.setBounds(WIDTH / 2 - TEXT_FIELD_WIDTH / 2, 200, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
         usernameField.addKeyListener(this);
@@ -247,7 +231,7 @@ public final class LoginGui extends Gui implements KeyListener {
     @Override
     public void draw(@NotNull final Graphics2D g) {
         g.setFont(Timetable.DEFAULT_FONT);
-        g.drawImage(hspvLogo, -10, 0, LOGO_WIDTH, LOGO_HEIGHT, null);
+        g.drawImage(ImageType.HSPV_LOGO.getImage(), -10, 0, LOGO_WIDTH, LOGO_HEIGHT, null);
 
         g.drawString("Benutzername", WIDTH / 2 - TEXT_FIELD_WIDTH / 2, 190);
         g.drawString("Passwort", WIDTH / 2 - TEXT_FIELD_WIDTH / 2, 290);

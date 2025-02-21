@@ -1,15 +1,12 @@
 package de.gemuesehasser.hspv.object.gui;
 
+import de.gemuesehasser.hspv.constant.ImageType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
-
-import javax.imageio.ImageIO;
 
 import java.awt.Graphics2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,8 +28,6 @@ public final class LoadingGui extends Gui implements Runnable {
     /** Der Scheduler, welcher dafür zuständig ist, den Ladebildschirm konstant zu aktualisieren. */
     @NotNull
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    /** Die Grafik, welche die Grundlage für diese Lade-Animation darstellt. */
-    private BufferedImage waitingImage;
     /** Die aktuelle Gradzahl, um die die Lade-Grafik gedreht ist. */
     @Range(from = 0, to = 360)
     private double angle = 0;
@@ -49,12 +44,6 @@ public final class LoadingGui extends Gui implements Runnable {
         super("", WIDTH, HEIGHT);
         super.setUndecorated(true);
         super.setShape(new RoundRectangle2D.Double(0, 0, WIDTH, HEIGHT, 30, 30));
-
-        try {
-            waitingImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/loading.png")));
-        } catch (@NotNull final IOException ignored) {
-            System.out.println("Loading-Image konnte nicht geladen werden.");
-        }
     }
     //</editor-fold>
 
@@ -68,18 +57,20 @@ public final class LoadingGui extends Gui implements Runnable {
      */
     @NotNull
     private BufferedImage getRotatedImage(@Range(from = 0, to = 360) final Double angle) {
+        final BufferedImage loadingImage = ImageType.LOADING_IMAGE.getImage();
+
         final double sin = Math.abs(Math.sin(Math.toRadians(angle)));
         final double cos = Math.abs(Math.cos(Math.toRadians(angle)));
-        final int w = waitingImage.getWidth();
-        final int h = waitingImage.getHeight();
+        final int w = loadingImage.getWidth();
+        final int h = loadingImage.getHeight();
         final int neww = (int) Math.floor(w * cos + h * sin);
         final int newh = (int) Math.floor(h * cos + w * sin);
 
-        final BufferedImage rotated = new BufferedImage(neww, newh, waitingImage.getType());
+        final BufferedImage rotated = new BufferedImage(neww, newh, loadingImage.getType());
         final Graphics2D graphic = rotated.createGraphics();
         graphic.translate((neww - w) / 2, (newh - h) / 2);
         graphic.rotate(Math.toRadians(angle), (double) w / 2, (double) h / 2);
-        graphic.drawRenderedImage(waitingImage, null);
+        graphic.drawRenderedImage(loadingImage, null);
         graphic.dispose();
         return rotated;
     }
