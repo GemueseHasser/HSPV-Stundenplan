@@ -18,6 +18,14 @@ import java.util.Random;
 @RequiredArgsConstructor
 public final class LVS {
 
+    //<editor-fold desc="CONSTANTS">
+    /** Der höchste zufällig generierte Wert der Farbe Rot / Grün / Blau. */
+    private static final int HIGHEST_COLOR_VALUE = 250;
+    /** Der niedrigste zufällig generierte Wert der Farbe Rot / Grün / Blau. */
+    private static final int LOWEST_COLOR_VALUE = 165;
+    //</editor-fold>
+
+
     //<editor-fold desc="LOCAL FIELDS">
     /** Das Startdatum/Zeitpunkt der Veranstaltung. */
     @NotNull
@@ -49,12 +57,9 @@ public final class LVS {
         final Random random = new Random();
         final int colorChoice = random.nextInt(3);
 
-        final int lowest = 190;
-        final int highest = 250;
-
-        final int r = (colorChoice == 0) ? 255 : random.nextInt(highest - lowest + 1) + lowest;
-        final int g = (colorChoice == 1) ? 255 : random.nextInt(highest - lowest + 1) + lowest;
-        final int b = (colorChoice == 2) ? 255 : random.nextInt(highest - lowest + 1) + lowest;
+        final int r = (colorChoice == 0) ? 255 : random.nextInt(HIGHEST_COLOR_VALUE - LOWEST_COLOR_VALUE + 1) + LOWEST_COLOR_VALUE;
+        final int g = (colorChoice == 1) ? 255 : random.nextInt(HIGHEST_COLOR_VALUE - LOWEST_COLOR_VALUE + 1) + LOWEST_COLOR_VALUE;
+        final int b = (colorChoice == 2) ? 255 : random.nextInt(HIGHEST_COLOR_VALUE - LOWEST_COLOR_VALUE + 1) + LOWEST_COLOR_VALUE;
 
         return new Color(r, g, b);
     }
