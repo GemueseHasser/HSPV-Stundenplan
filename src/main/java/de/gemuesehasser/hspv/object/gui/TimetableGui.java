@@ -7,7 +7,6 @@ import de.gemuesehasser.hspv.object.Gui;
 import de.gemuesehasser.hspv.object.LVS;
 import de.gemuesehasser.hspv.object.gui.component.LvsButton;
 import de.gemuesehasser.hspv.object.gui.component.TimelineDraw;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -245,7 +244,6 @@ public final class TimetableGui extends Gui implements KeyListener {
 
     /* This drawing method includes everything under the buttons. */
     @Override
-    @SneakyThrows
     public void draw(@NotNull final Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, 0, WIDTH, HEIGHT);
